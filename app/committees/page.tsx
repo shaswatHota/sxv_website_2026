@@ -16,10 +16,10 @@ export default function CommitteesPage() {
           <div key={club.id} className="mb-6 break-inside-avoid">
            
             
-              <Card classname="overflow-hidden rounded-2xl bg-white shadow-lg">
+              <Card classname="overflow-hidden rounded-2xl bg-transparent">
                 <div className="relative h-[420px] w-full">
                   <Image
-                    src={club.image!}
+                    src={club.image}
                     alt={club.name}
                     fill
                     className="object-cover"
@@ -33,9 +33,7 @@ export default function CommitteesPage() {
                     </h3>
 
                     <div className="mt-3 flex -space-x-2">
-                      <div className="h-8 w-8 rounded-full bg-white border" />
-                      <div className="h-8 w-8 rounded-full bg-white border" />
-                      <div className="h-8 w-8 rounded-full bg-white border" />
+                      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eum magni eaque nostrum praesentium, fuga quasi quis quod, necessitatibus illum accusantium deserunt. Doloremque, ipsam.</p>
                     </div>
                   </div>
                 </div>
