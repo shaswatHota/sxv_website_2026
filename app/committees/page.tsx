@@ -14,7 +14,7 @@ export default function CommitteesPage() {
       <div className="columns-1 sm:columns-2 lg:columns-3 gap-6">
         {clubs.map((club) => (
           <div key={club.id} className="mb-6 break-inside-avoid">
-            {club.type === "image" ? (
+           
             
               <Card classname="overflow-hidden rounded-2xl bg-white shadow-lg">
                 <div className="relative h-[420px] w-full">
@@ -40,13 +40,8 @@ export default function CommitteesPage() {
                   </div>
                 </div>
               </Card>
-            ) : (
-              <Card classname="bg-[#1f2933] text-white rounded-2xl p-8 h-[420px] flex items-center">
-                <p className="text-lg leading-relaxed font-medium">
-                  {club.name}
-                </p>
-              </Card>
-            )}
+           
+          
           </div>
         ))}
       </div>
