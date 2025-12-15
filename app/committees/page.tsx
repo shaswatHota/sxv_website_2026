@@ -1,45 +1,53 @@
 import Image from "next/image";
-import Card from "@/components/Card";
 import { clubs } from "@/utils/clubData";
+import Card from "@/components/Card";
 
-export default function CommitteesPage() {
+export default function ClubsPage() {
   return (
-    <section className="bg-black px-6 py-24 text-white">
-      <div className="mb-16 text-center">
-        <h1 className="text-4xl font-bold">
-          ORGANIZING CLUBS AND SOCIETIES
+    <section className="min-h-screen bg-black px-6 py-24 text-white">
+   
+      <div className="mb-20 text-center">
+        <h1 className="text-4xl font-bold tracking-wide">
+          ORGANIZING CLUBS & SOCIETIES
         </h1>
+        <p className="mt-4 text-gray-400">
+          Explore the vibrant student communities of our college
+        </p>
       </div>
 
-      <div className="columns-1 sm:columns-2 lg:columns-3 gap-6">
+ 
+      <div className="columns-1 gap-8 sm:columns-2 lg:columns-3">
         {clubs.map((club) => (
           <div key={club.id} className="mb-6 break-inside-avoid">
-           
+            {club.type === "image" ? (
             
-              <Card classname="overflow-hidden rounded-2xl bg-transparent">
+              <Card classname="overflow-hidden rounded-2xl bg-white shadow-lg">
                 <div className="relative h-[420px] w-full">
                   <Image
-                    src={club.image}
+                    src={club.image!}
                     alt={club.name}
                     fill
                     className="object-cover"
                   />
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                <div className="absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-                  <div className="absolute bottom-0 p-5 text-white">
-                    <h3 className="text-lg font-semibold leading-snug">
-                      {club.name}
-                    </h3>
-
-                    <div className="mt-3 flex -space-x-2">
-                      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eum magni eaque nostrum praesentium, fuga quasi quis quod, necessitatibus illum accusantium deserunt. Doloremque, ipsam.</p>
-                    </div>
+             
+                <div className="absolute inset-0 flex flex-col justify-end p-6">
+                  
+                  <h3 className="text-lg font-semibold tracking-wide">
+                    {club.name}
+                  </h3>
                   </div>
                 </div>
               </Card>
-           
-          
+            ) : (
+              <Card classname="bg-[#1f2933] text-white rounded-2xl p-8 h-[420px] flex items-center">
+                <p className="text-lg leading-relaxed font-medium">
+                  {club.name}
+                </p>
+              </Card>
+            )}
           </div>
         ))}
       </div>
