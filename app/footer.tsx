@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="bg-black px-6 py-24">
+    <footer className="bg-[#e0e5eb] px-6 py-24">
       <div className="mx-auto max-w-7xl">
 
         
@@ -63,7 +63,7 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="hover:text-white transition">
+                  <Link href="/contactUs" className="hover:text-white transition">
                     Contact Us
                   </Link>
                 </li>
