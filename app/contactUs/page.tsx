@@ -4,11 +4,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useState } from 'react';
-import { contactUsButton as ContactUsButton } from '@/components/ui/contactUsButton';
+import { ContactUsButton as ContactUsButton } from '@/components/ui/contactUsButton';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { contactUsCard as ContactUsCard, CardContent, CardHeader, CardTitle } from '@/components/ui/contactUsCard';
+import { ContactUsCard as ContactUsCard, CardContent, CardHeader, CardTitle } from '@/components/ui/contactUsCard';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 // Simple validation schema
