@@ -7,7 +7,7 @@ import HamburgerButton from './MenuButton'
 import { useState } from 'react'
 import { motion } from 'motion/react'
 
-const navItems: String[] = ['Home', 'Events', 'Guests', 'Sponsors', 'Crew']
+const navItems: String[] = ['Home', 'Events', 'Guests','Committees', 'Team','contactUs']
 
 export default function Navbar({ isLoggedIn = false, onSignOut }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
@@ -37,12 +37,12 @@ export default function Navbar({ isLoggedIn = false, onSignOut }: NavbarProps) {
           <div className="lg:flex items-center hidden">
             <ul className="flex w-full justify-between gap-5">
               <li>
-                <Link href="/">
+                <Link href="/signup">
                   <Button>Register</Button>
                 </Link>
               </li>
               <li>
-                <Link href="/">
+                <Link href="/login">
                   <Button>login</Button>
                 </Link>
               </li>
