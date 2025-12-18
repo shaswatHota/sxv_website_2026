@@ -17,7 +17,6 @@ import {
 } from "next/font/google";
 import {LoginSchema} from "@/Schemas/loginSchema";
 import { motion, AnimatePresence } from "framer-motion";
-import {} from "lucide-react";
 
 const prata = Prata({
   subsets: ["latin"],
@@ -84,10 +83,10 @@ export default function LoginPage() {
   const handleLogin = async () => {
     const res = LoginSchema.safeParse({ email, password });
     if (!res.success) {
-      const emailInlValid: object | undefined = res.error.issues.find(
+      const emailInlValid = res.error.issues.find(
         (issue) => issue.path[0] === "email"
       );
-      const passwordInValid: object | undefined = res.error.issues.find(
+      const passwordInValid = res.error.issues.find(
         (issue) => issue.path[0] === "password"
       );
       if (emailInlValid) {
