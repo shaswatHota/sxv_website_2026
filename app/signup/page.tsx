@@ -5,7 +5,8 @@ import AuthInput from "@/components/AuthInput";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
 import CustomDropdown from "@/components/CustomDropdown";
 import { sendOTP, signup, googleSignUp } from "@/services/auth";
-import  SignupSchema  from "@/Schemas/signupSchema";
+import SignupSchemaStep1 from "@/Schemas/SignupSchemaStep1";
+import SignupSchemaStep2 from "@/Schemas/signupSchemaStep2";
 import Link from "next/link";
 import { TextField, InputAdornment, IconButton } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -34,12 +35,6 @@ const i_serif = Roboto_Slab({
   subsets: ["latin"],
   weight: ["400"],
   fallback: ["sans-serif"],
-});
-
-const domine = Domine({
-  subsets: ["latin"],
-  weight: ["400"],
-  fallback: ["serif"],
 });
 
 const cd = Cormorant_Garamond({
@@ -83,7 +78,9 @@ export default function SignupPage() {
   const [nameErr, setNameErr] = useState<string>("");
   const [emailError, setEmailError] = useState<boolean | string>("");
   const [emailErr, setEmailErr] = useState<string>("");
-  const [confirmpasswordError, setConfirmPasswordError] = useState<boolean | string>("");
+  const [confirmpasswordError, setConfirmPasswordError] = useState<
+    boolean | string
+  >("");
   const [confirmpasswordErr, setconfirmpassworderr] = useState<string>("");
   const [passwordError, setPasswordError] = useState<boolean | string>("");
   const [passwordErr, setpassworderr] = useState<string>("");
@@ -157,7 +154,8 @@ export default function SignupPage() {
   };
 
   const validatePassword = () => {
-    const res = SignupSchema.shape.password.safeParse(form.password);
+    const Passwords: string = form.password.toString();
+    const res = SignupSchemaStep2.shape.password.safeParse(Passwords);
     if (!res.success) {
       setPasswordError(false);
       setpassworderr(res.error.issues[0].message);
@@ -166,22 +164,24 @@ export default function SignupPage() {
     }
   };
 
-  const validateConfirmPassword = ()=>{
-    const res = SignupSchema.shape.confirmPassword.safeParse(form.confirmPassword);
-    if(!res.success){
+  const validateConfirmPassword = () => {
+    const ConfirmPasswords: string = form.confirmPassword.toString();
+    const res =
+      SignupSchemaStep2.shape.confirmPassword.safeParse(ConfirmPasswords);
+    if (!res.success) {
       setConfirmPasswordError(false);
       setconfirmpassworderr(res.error.issues[0].message);
-    }else{
+    } else {
       setConfirmPasswordError(true);
     }
-    if(form.password!=form.confirmPassword){
+    if (form.password != form.confirmPassword) {
       setConfirmPasswordError(false);
       setconfirmpassworderr("Passwords do not match.");
     }
-  }
+  };
 
   const validateEmail = () => {
-    const res = SignupSchema.shape.email.safeParse(form.email);
+    const res = SignupSchemaStep1.shape.email.safeParse(form.email);
     if (!res.success) {
       setEmailError(false);
       setEmailErr(res.error.issues[0].message);
@@ -191,7 +191,7 @@ export default function SignupPage() {
   };
 
   const validateName = () => {
-    const res = SignupSchema.shape.name.safeParse(form.name);
+    const res = SignupSchemaStep1.shape.name.safeParse(form.name);
     if (!res.success) {
       setNameError(false);
       setNameErr(res.error.issues[0].message);
@@ -201,7 +201,7 @@ export default function SignupPage() {
   };
 
   const validatePhone = () => {
-    const res = SignupSchema.shape.phone.safeParse(form.phone);
+    const res = SignupSchemaStep1.shape.phone.safeParse(form.phone);
     if (!res.success) {
       setPhoneError(false);
       setPhoneErr(res.error.issues[0].message);
@@ -211,26 +211,36 @@ export default function SignupPage() {
   };
 
   const handleSendOTP = async () => {
-    const res = SignupSchema.safeParse({ name: form.name, email: form.email, phone: form.phone });
-    if(!res.success){
-      const emailInValid: object | undefined = res.error.issues.find((issue)=>issue.path[0]==="email");
-      const nameInValid: object | undefined = res.error.issues.find((issue)=>issue.path[0]==="name");
-      const phoneInValid: object | undefined = res.error.issues.find((issue)=>issue.path[0]==="phone");
-      if(emailInValid){
+    const res = SignupSchemaStep1.safeParse({
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+    });
+    if (!res.success) {
+      const emailInValid= res.error.issues.find(
+        (issue) => issue.path[0] === "email"
+      );
+      const nameInValid= res.error.issues.find(
+        (issue) => issue.path[0] === "name"
+      );
+      const phoneInValid= res.error.issues.find(
+        (issue) => issue.path[0] === "phone"
+      );
+      if (emailInValid) {
         setEmailError(false);
         setEmailErr(emailInValid.message);
       }
-      if(nameInValid){
+      if (nameInValid) {
         setNameError(false);
         setNameErr(nameInValid.message);
       }
-      if(phoneInValid){
+      if (phoneInValid) {
         setPhoneError(false);
         setPhoneErr(phoneInValid.message);
       }
       return;
     }
-    
+
     setLoading(true);
     try {
       await sendOTP({ email: form.email });
@@ -244,7 +254,34 @@ export default function SignupPage() {
   };
 
   const handleSignup = async () => {
-    if (!validateStep2()) return;
+    const res = SignupSchemaStep2.safeParse({
+      password: form.password,
+      confirmPassword: form.confirmPassword,
+    });
+    if (!res.success) {
+      const passwordInValid = res.error.issues.find(
+        (issue) => issue.path[0] === "email"
+      );
+      const confirmPasswordInvalid = res.error.issues.find(
+        (issue) => issue.path[0] === "name"
+      );
+      if (passwordInValid) {
+        setPasswordError(false);
+        setpassworderr(passwordInValid.message);
+      }
+      if (confirmPasswordInvalid) {
+        setConfirmPasswordError(false);
+        setconfirmpassworderr(confirmPasswordInvalid.message);
+      }
+      return;
+    }
+
+    if (form.password !== form.confirmPassword) {
+      setConfirmPasswordError(false);
+      setconfirmpassworderr("Passwords do not match.");
+      return;
+    }
+
     setLoading(true);
     try {
       const payload = {
@@ -389,11 +426,12 @@ export default function SignupPage() {
                         backgroundColor: "black",
                         borderRadius: "0.5rem",
                         "& fieldset": {
-                          borderColor: nameError === false
-                            ? "red"
-                            : nameError === true
-                            ? "green"
-                            : "#6b7280",
+                          borderColor:
+                            nameError === false
+                              ? "red"
+                              : nameError === true
+                              ? "green"
+                              : "#6b7280",
                         },
                         "&:hover fieldset": {
                           borderColor: "#6b7280",
@@ -425,7 +463,7 @@ export default function SignupPage() {
                         initial={{ opacity: 0, y: -15 }}
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ opacity: 0, y: -15 }}
-                        className="text-red-700 font-bold mt-2"
+                        className="text-red-700 font-bold mt-2 cursor-default"
                       >
                         {nameErr}
                       </motion.p>
@@ -447,11 +485,12 @@ export default function SignupPage() {
                         backgroundColor: "black",
                         borderRadius: "0.5rem",
                         "& fieldset": {
-                          borderColor: emailError === false
-                            ? "red"
-                            : emailError === true
-                            ? "green"
-                            : "#6b7280",
+                          borderColor:
+                            emailError === false
+                              ? "red"
+                              : emailError === true
+                              ? "green"
+                              : "#6b7280",
                         },
                         "&:hover fieldset": {
                           borderColor: "#6b7280",
@@ -483,7 +522,7 @@ export default function SignupPage() {
                         initial={{ opacity: 0, y: -15 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -15 }}
-                        className="text-red-700 font-bold mt-2"
+                        className="text-red-700 font-bold mt-2 cursor-default"
                       >
                         {emailErr}
                       </motion.p>
@@ -505,11 +544,12 @@ export default function SignupPage() {
                         backgroundColor: "black",
                         borderRadius: "0.5rem",
                         "& fieldset": {
-                          borderColor: phoneError === false
-                            ? "red"
-                            : phoneError === true
-                            ? "green"
-                            : "#6b7280",
+                          borderColor:
+                            phoneError === false
+                              ? "red"
+                              : phoneError === true
+                              ? "green"
+                              : "#6b7280",
                         },
                         "&:hover fieldset": {
                           borderColor: "#6b7280",
@@ -536,7 +576,16 @@ export default function SignupPage() {
                     onBlur={validatePhone}
                   />
                   <AnimatePresence>
-                    {(!phoneError && phoneErr) && (<motion.p initial={{y:-15,opacity:0}} animate={{y:0,opacity:1}} exit={{y:-15,opacity:0}} className="text-red-700 font-bold mt-2">{phoneErr}</motion.p>)}
+                    {!phoneError && phoneErr && (
+                      <motion.p
+                        initial={{ y: -15, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: -15, opacity: 0 }}
+                        className="text-red-700 font-bold mt-2 cursor-default"
+                      >
+                        {phoneErr}
+                      </motion.p>
+                    )}
                   </AnimatePresence>
                 </div>
 
@@ -666,7 +715,8 @@ export default function SignupPage() {
                       backgroundColor: "black",
                       borderRadius: "0.5rem",
                       "& fieldset": {
-                        borderColor: passwordError === false
+                        borderColor:
+                          passwordError === false
                             ? "red"
                             : passwordError === true
                             ? "green"
@@ -702,6 +752,7 @@ export default function SignupPage() {
                       initial={{ y: -15, opacity: 0 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ y: -15, opacity: 0 }}
+                      className="text-red-700 font-bold mt-2 cursor-default"
                     >
                       {passwordErr}
                     </motion.p>
@@ -743,7 +794,8 @@ export default function SignupPage() {
                       backgroundColor: "black",
                       borderRadius: "0.5rem",
                       "& fieldset": {
-                        borderColor: confirmpasswordError === false
+                        borderColor:
+                          confirmpasswordError === false
                             ? "red"
                             : confirmpasswordError === true
                             ? "green"
@@ -774,11 +826,12 @@ export default function SignupPage() {
                   onBlur={validateConfirmPassword}
                 />
                 <AnimatePresence>
-                  {(!confirmpasswordError && confirmpasswordErr) && (
+                  {!confirmpasswordError && confirmpasswordErr && (
                     <motion.p
                       initial={{ y: -15, opacity: 0 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ y: -15, opacity: 0 }}
+                      className="text-red-700 font-bold mt-2 cursor-default"
                     >
                       {confirmpasswordErr}
                     </motion.p>
@@ -789,14 +842,14 @@ export default function SignupPage() {
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="flex-1 py-3 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50"
+                  className="flex-1 py-3 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 cursor-pointer"
                 >
                   Back
                 </button>
                 <button
-                  onClick={handleSignup}
+                  onMouseDown={handleSignup}
                   disabled={loading}
-                  className="flex-1 py-3 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700 disabled:bg-emerald-300 text-sm shadow-sm"
+                  className="flex-1 py-3 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700 disabled:bg-emerald-300 text-sm shadow-sm cursor-pointer"
                 >
                   {loading ? "Signing up..." : "Complete Signup"}
                 </button>
