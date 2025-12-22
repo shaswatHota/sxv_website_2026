@@ -31,7 +31,7 @@ const EVENTS_DATA = [
   },
   {
     id: 5,
-    title: "WORKSHOP",
+    title: "CODEBID",
     image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?q=80&w=800&auto=format&fit=crop",
     color: "#60a5fa" // Blueish
   }
@@ -92,7 +92,7 @@ export default function EventsSlider() {
 
   return (
     <div 
-      className="min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center justify-center relative overflow-hidden font-sans"
+      className="min-h-screen bg-transparent text-white flex flex-col items-center justify-center relative overflow-hidden font-sans"
       onKeyDown={handleKeyDown}
       tabIndex={0}
       onTouchStart={handleTouchStart}
