@@ -48,259 +48,532 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen bg-[#E0E5EC] text-[#4A5568] font-sans selection:bg-slate-300 selection:text-slate-800 flex flex-col">
+    <div className="min-h-screen bg-white text-gray-800 font-sans selection:bg-blue-200 selection:text-blue-900 relative overflow-hidden">
 
-      {/* Custom Neumorphism Styles */}
+      {/* Advanced Clean Styles */}
       <style>{`
-        .shadow-neu-flat {
-          box-shadow: 9px 9px 16px rgb(163,177,198,0.6), -9px -9px 16px rgba(255,255,255, 0.5);
+        /* Festive particle animations */
+        @keyframes sparkle {
+          0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+          50% { opacity: 1; transform: scale(1) rotate(180deg); }
         }
-        .shadow-neu-pressed {
-          box-shadow: inset 6px 6px 10px 0 rgba(163,177,198, 0.7), inset -6px -6px 10px 0 rgba(255,255,255, 0.8);
+        
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-10px) rotate(1deg); }
         }
-        /* Map container styling */
-        .map-container {
-          position: relative;
+        
+        @keyframes slide-in-left {
+          from { transform: translateX(-100px); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slide-in-right {
+          from { transform: translateX(100px); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fade-in-up {
+          from { transform: translateY(50px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes swing {
+          0%, 100% { transform: rotate(-2deg); }
+          50% { transform: rotate(2deg); }
+        }
+        
+        @keyframes bulb-glow {
+          0%, 100% { 
+            box-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+            filter: brightness(1.1);
+          }
+          50% { 
+            box-shadow: 0 0 15px currentColor, 0 0 30px currentColor, 0 0 45px currentColor;
+            filter: brightness(1.3);
+          }
+        }
+
+        /* Clean card effects */
+        .clean-card {
+          background: white;
+          border: 1px solid #e5e7eb;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .clean-input {
+          background: white;
+          border: 2px solid #e5e7eb;
+          transition: all 0.3s ease;
+        }
+        
+        .clean-input:focus {
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Clean button effects */
+        .clean-button {
+          background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+          color: white;
+          transition: all 0.3s ease;
+        }
+        
+        .clean-button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Castle styling - Fixed and prominent */
+        .castle-fixed {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          z-index: 50;
+          opacity: 0.7;
+          animation: float 6s ease-in-out infinite;
+          filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
+        
+        .castle-fixed:hover {
+          opacity: 0.9;
+          transform: scale(1.05);
+        }
+        
+        /* Contact info hover effects */
+        .contact-item {
+          transition: all 0.3s ease;
+          border-radius: 12px;
+          padding: 1rem;
+        }
+        
+        .contact-item:hover {
+          background: #f8fafc;
+          transform: translateX(5px);
+        }
+        
+        /* String Lights Styling */
+        .lights-container {
+          position: absolute;
+          top: 0;
+          left: 0;
           width: 100%;
+          height: 80px;
+          z-index: 10;
+          pointer-events: none;
         }
-        .map-container iframe {
-          width: 100% !important;
-          height: 100% !important;
-          min-height: 280px;
+        
+        .lights-wire {
+          position: absolute;
+          top: 20px;
+          left: 0;
+          width: 100%;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, rgba(107, 114, 128, 0.3), transparent);
         }
-        /* Ensure proper mobile rendering */
-        @media (max-width: 640px) {
-          .map-container {
-            min-height: 280px;
-          }
-          .map-container iframe {
-            min-height: 280px;
-          }
+        
+        .light-bulb {
+          position: absolute;
+          top: 20px;
+          width: 18px;
+          height: 24px;
+          border-radius: 0 0 50% 50%;
+          animation: swing 3s ease-in-out infinite, bulb-glow 2s ease-in-out infinite;
+          transition: all 1s ease;
+          box-shadow: 0 0 12px currentColor, 0 0 24px currentColor;
+          border: 1px solid currentColor;
+          background-color: #3b82f6;
+          color: #3b82f6;
+        }
+        
+        .light-bulb::before {
+          content: '';
+          position: absolute;
+          top: -6px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 8px;
+          height: 6px;
+          background: rgba(107, 114, 128, 0.4);
+          border-radius: 3px;
+        }
+        
+        .light-bulb::after {
+          content: '';
+          position: absolute;
+          top: -12px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 1px;
+          height: 12px;
+          background: rgba(107, 114, 128, 0.3);
+        }
+        
+        /* Radial glow behind bulb */
+        .light-bulb-glow {
+          position: absolute;
+          top: 28px;
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+          opacity: 0.4;
+          filter: blur(12px);
+          pointer-events: none;
+          animation: bulb-glow 2s ease-in-out infinite;
+          transition: background-color 1s ease;
+          background-color: #3b82f6;
+        }
+        
+        /* Responsive animations */
+        .slide-in-left { animation: slide-in-left 0.8s ease-out; }
+        .slide-in-right { animation: slide-in-right 0.8s ease-out; }
+        .fade-in-up { animation: fade-in-up 0.6s ease-out; }
+        
+        /* Clean text styling */
+        .text-gradient {
+          background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
       `}</style>
 
-      {/* Main Content Wrapper */}
-      <main className="flex-grow flex flex-col items-center justify-center p-4 md:p-8">
+      {/* Festive String Lights */}
+      <div className="lights-container">
+        <div className="lights-wire"></div>
+        {[...Array(20)].map((_, i) => (
+          <div key={i} style={{ position: 'absolute', left: `${(i * 5) + 2.5}%` }}>
+            <div
+              className="light-bulb-glow"
+              id={`glow-${i}`}
+              style={{
+                left: '-11px',
+                animationDelay: `${i * 0.1}s`,
+              }}
+            />
+            <div
+              className="light-bulb"
+              id={`bulb-${i}`}
+              style={{
+                animationDelay: `${i * 0.2}s`,
+              }}
+            />
+          </div>
+        ))}
+      </div>
 
-        {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-2 text-[#4A5568]">
-            Contact Us
-          </h1>
-          <p className="text-lg text-[#4A5568]/80 font-medium">
-            We'd love to help you
-          </p>
+      <script dangerouslySetInnerHTML={{
+        __html: `
+          (function() {
+            const colors = [
+              '#7aa2f7', // Tokyo Blue - Enhanced
+              '#bb9af7', // Tokyo Purple - Enhanced
+              '#7dcfff', // Tokyo Cyan - Enhanced
+              '#9ece6a', // Tokyo Green - Enhanced
+              '#f7768e', // Tokyo Red - Enhanced
+              '#e0af68', // Tokyo Yellow - Enhanced
+              '#ff9e64', // Tokyo Orange - Enhanced
+              '#73daca', // Teal - Added for variety
+              '#ff7a93', // Pink - Added for variety
+              '#ffc777', // Gold - Added for variety
+            ];
+            
+            function getRandomColor() {
+              return colors[Math.floor(Math.random() * colors.length)];
+            }
+            
+            function changeAllBulbColors() {
+              for (let i = 0; i < 20; i++) {
+                const bulb = document.getElementById('bulb-' + i);
+                const glow = document.getElementById('glow-' + i);
+                if (bulb && glow) {
+                  // Each bulb gets its own random color
+                  const randomColor = getRandomColor();
+                  bulb.style.backgroundColor = randomColor;
+                  bulb.style.color = randomColor;
+                  bulb.style.borderColor = randomColor;
+                  glow.style.backgroundColor = randomColor;
+                  
+                  // Add extra brightness for better visibility
+                  bulb.style.filter = 'brightness(1.2) saturate(1.3)';
+                }
+              }
+            }
+            
+            function initializeBulbs() {
+              // Wait a bit to ensure DOM is fully loaded
+              setTimeout(() => {
+                // Set initial random colors for all bulbs
+                changeAllBulbColors();
+                
+                // Change all bulbs' colors every 4 seconds
+                setInterval(changeAllBulbColors, 4000);
+              }, 100);
+            }
+            
+            // Initialize when DOM is ready
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', initializeBulbs);
+            } else {
+              initializeBulbs();
+            }
+          })();
+        `
+      }} />
+
+      {/* Fixed Castle in Right Corner */}
+      <div className="castle-fixed">
+        <img 
+          src="/castle.png" 
+          alt="Festival Castle" 
+          className="w-24 h-24 md:w-32 md:h-32 object-contain cursor-pointer transition-transform duration-300"
+        />
+      </div>
+
+      {/* Hero Section */}
+      <div className="relative pt-20 pb-12 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center fade-in-up">
+            <div className="flex items-center justify-center mb-6">
+              <img 
+                src="/logo.svg" 
+                alt="Festival Logo" 
+                className="w-16 h-16 md:w-20 md:h-20 mr-4 opacity-80"
+              />
+              <h1 className="text-5xl md:text-7xl font-bold text-gradient">
+                Contact Us
+              </h1>
+            </div>
+            <p className="text-xl md:text-2xl text-gray-600 font-medium mb-2">
+              Join the Festive Celebration
+            </p>
+            <p className="text-lg text-gray-500">
+              We'd love to hear from you and help make your experience magical
+            </p>
+          </div>
         </div>
+      </div>
 
-        {/* The Two-Column Card */}
-        <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-8 lg:gap-12">
-
-          {/* Left Column: Contact Info */}
-          <div className="w-full lg:w-5/12 flex flex-col gap-6 order-2 lg:order-1">
-            <ContactUsCard className="bg-[#E0E5EC] border-none shadow-neu-flat min-h-[600px] sm:min-h-[650px] lg:h-full flex flex-col">
-              <CardHeader>
-                <CardTitle className="text-2xl font-bold pl-2 border-l-4 border-[#4A5568] text-[#4A5568]">
-                  Get in Touch
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex-1 flex flex-col">
-                <div className="flex flex-col gap-6 mb-6">
-                  {/* Location */}
-                  <div className="flex items-start gap-4 group">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-full shadow-neu-flat flex items-center justify-center text-[#4A5568] group-hover:scale-105 transition-transform duration-300">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      {/* Main Content */}
+      <div className="container mx-auto px-4 pb-20">
+        <div className="grid lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
+          
+          {/* Contact Information Card */}
+          <div className="slide-in-left">
+            <div className="clean-card rounded-3xl p-8 h-full">
+              <div className="mb-8">
+                <h2 className="text-3xl font-bold text-blue-600 mb-2">Get in Touch</h2>
+                <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full"></div>
+              </div>
+              
+              <div className="space-y-6 mb-8">
+                {/* Location */}
+                <div className="contact-item group">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
                     </div>
-                    <div className="flex-col">
-                      <span className="text-sm font-bold opacity-70 block mb-1">Visit Us</span>
-                      <p className="text-sm leading-relaxed">
-                        Veer Surendra Sai University of Technology,<br />
-                        Siddhi Vihar, Burla, Sambalpur,<br />
+                    <div>
+                      <h3 className="text-lg font-bold text-blue-600 mb-1">Visit Our Campus</h3>
+                      <p className="text-gray-600 leading-relaxed">
+                        Veer Surendra Sai University of Technology<br />
+                        Siddhi Vihar, Burla, Sambalpur<br />
                         Odisha, PIN - 768018
                       </p>
                     </div>
                   </div>
+                </div>
 
-                  {/* Phone */}
-                  <div className="flex items-center gap-4 group">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-full shadow-neu-flat flex items-center justify-center text-[#4A5568] group-hover:scale-105 transition-transform duration-300">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {/* Phone */}
+                <div className="contact-item group">
+                  <div className="flex items-center gap-4">
+                    <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                       </svg>
                     </div>
-                    <div className="flex-col">
-                      <span className="text-sm font-bold opacity-70 block mb-1">Call Us</span>
-                      <p className="text-sm font-medium tracking-wide">
-                        +91 9861-405-554
-                      </p>
+                    <div>
+                      <h3 className="text-lg font-bold text-green-600 mb-1">Call Us</h3>
+                      <p className="text-xl font-semibold text-gray-800">+91 9861-405-554</p>
                     </div>
                   </div>
+                </div>
 
-                  {/* Email */}
-                  <div className="flex items-center gap-4 group">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-full shadow-neu-flat flex items-center justify-center text-[#4A5568] group-hover:scale-105 transition-transform duration-300">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {/* Email */}
+                <div className="contact-item group">
+                  <div className="flex items-center gap-4">
+                    <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
                     </div>
-                    <div className="flex-col">
-                      <span className="text-sm font-bold opacity-70 block mb-1">Email Us</span>
-                      <p className="text-sm font-medium break-all">
-                        festvssut2024@gmail.com
-                      </p>
+                    <div>
+                      <h3 className="text-lg font-bold text-purple-600 mb-1">Email Us</h3>
+                      <p className="text-lg font-medium text-gray-800 break-all">festvssut2024@gmail.com</p>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                {/* Google Map */}
-                <div className="map-container flex-grow w-full rounded-2xl shadow-neu-pressed overflow-hidden min-h-[280px] sm:min-h-[320px] md:min-h-[350px]">
-                  <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3719.0847!2d83.9040!3d21.4973!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a21c7e1c7e1c7e1%3A0x1234567890abcdef!2sVSSUT%2C%20Burla%2C%20Sambalpur%2C%20Odisha%20768018!5e0!3m2!1sen!2sin!4v1639123456789"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0, minHeight: '280px', display: 'block', width: '100%', height: '100%' }}
-                    allowFullScreen={true}
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="VSSUT Location Map"
-                  ></iframe>
-                </div>
-              </CardContent>
-            </ContactUsCard>
+              {/* Map */}
+              <div className="border-2 border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3719.0847!2d83.9040!3d21.4973!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a21c7e1c7e1c7e1%3A0x1234567890abcdef!2sVSSUT%2C%20Burla%2C%20Sambalpur%2C%20Odisha%20768018!5e0!3m2!1sen!2sin!4v1639123456789"
+                  width="100%"
+                  height="300"
+                  style={{ border: 0 }}
+                  allowFullScreen={true}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="VSSUT Location Map"
+                ></iframe>
+              </div>
+            </div>
           </div>
 
-          {/* Right Column: The Form */}
-          <div className="w-full lg:w-7/12 order-1 lg:order-2">
-            <ContactUsCard className="bg-[#E0E5EC] border-none shadow-neu-flat min-h-[600px] sm:min-h-[650px] lg:h-full">
-              <CardContent className="p-6 md:p-8 lg:p-12">
-                <form onSubmit={handleSubmit(onSubmit)} className="h-full flex flex-col justify-between">
-                  <div className="flex flex-col gap-4">
+          {/* Contact Form */}
+          <div className="slide-in-right">
+            <div className="clean-card rounded-3xl p-8 h-full">
+              <div className="mb-8">
+                <h2 className="text-3xl font-bold text-blue-600 mb-2">Send us a Message</h2>
+                <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"></div>
+              </div>
 
-                    {/* Name Input */}
-                    <div className="flex flex-col gap-2 group">
-                      <Label htmlFor="name" className="text-base font-bold ml-2 text-[#4A5568]">Name</Label>
-                      <div className="relative">
-                        <svg className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                        <Input
-                          type="text"
-                          id="name"
-                          {...register('name')}
-                          className="bg-[#E0E5EC] text-[#4A5568] rounded-2xl pl-14 pr-6 py-4 shadow-neu-pressed border-none font-medium text-lg h-auto focus-visible:ring-2 focus-visible:ring-[#4A5568]/10"
-                          placeholder="Your Name"
-                        />
-                      </div>
-                      {errors.name && (
-                        <span className="text-xs text-red-500 ml-2">{errors.name.message}</span>
-                      )}
-                    </div>
-
-                    {/* Email Input */}
-                    <div className="flex flex-col gap-2 group">
-                      <Label htmlFor="email" className="text-base font-bold ml-2 text-[#4A5568]">E-mail</Label>
-                      <div className="relative">
-                        <svg className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        <Input
-                          type="email"
-                          id="email"
-                          {...register('email')}
-                          className="bg-[#E0E5EC] text-[#4A5568] rounded-2xl pl-14 pr-6 py-4 shadow-neu-pressed border-none font-medium text-lg h-auto focus-visible:ring-2 focus-visible:ring-[#4A5568]/10"
-                          placeholder="your@email.com"
-                        />
-                      </div>
-                      {errors.email && (
-                        <span className="text-xs text-red-500 ml-2">{errors.email.message}</span>
-                      )}
-                    </div>
-
-                    {/* Phone Input */}
-                    <div className="flex flex-col gap-2 group">
-                      <Label htmlFor="phone" className="text-base font-bold ml-2 text-[#4A5568]">Phone No. <span className="text-xs font-normal opacity-60">(Optional)</span></Label>
-                      <div className="relative">
-                        <svg className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
-                        <Input
-                          type="tel"
-                          id="phone"
-                          {...register('phone')}
-                          className="bg-[#E0E5EC] text-[#4A5568] rounded-2xl pl-14 pr-6 py-4 shadow-neu-pressed border-none font-medium text-lg h-auto focus-visible:ring-2 focus-visible:ring-[#4A5568]/10"
-                          placeholder="Phone Number"
-                        />
-                      </div>
-                      {errors.phone && (
-                        <span className="text-xs text-red-500 ml-2">{errors.phone.message}</span>
-                      )}
-                    </div>
-
-                    {/* Query Textarea */}
-                    <div className="flex flex-col gap-2 group">
-                      <Label htmlFor="query" className="text-base font-bold ml-2 text-[#4A5568]">Query</Label>
-                      <div className="relative">
-                        <svg className="absolute left-5 top-5 w-5 h-5 text-gray-400 z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                        </svg>
-                        <Textarea
-                          id="query"
-                          {...register('query')}
-                          rows={5}
-                          className="bg-[#E0E5EC] text-[#4A5568] rounded-2xl pl-14 pr-6 py-4 shadow-neu-pressed border-none resize-none font-medium text-lg min-h-[120px] focus-visible:ring-2 focus-visible:ring-[#4A5568]/10"
-                          placeholder="Your Message"
-                        />
-                      </div>
-                      {errors.query && (
-                        <span className="text-xs text-red-500 ml-2">{errors.query.message}</span>
-                      )}
-                    </div>
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                {/* Name Input */}
+                <div className="space-y-2">
+                  <Label htmlFor="name" className="text-lg font-semibold text-gray-700 ml-2">Name</Label>
+                  <div className="relative">
+                    <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500 z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <Input
+                      type="text"
+                      id="name"
+                      {...register('name')}
+                      className="clean-input text-gray-800 rounded-2xl pl-12 pr-4 py-4 text-lg h-auto focus-visible:ring-0 focus-visible:ring-offset-0"
+                      placeholder="Your Name"
+                    />
                   </div>
-
-                  {/* Status Message */}
-                  {statusMessage && (
-                    <Alert className={`mt-4 ${
-                      submitStatus === 'success' 
-                        ? 'bg-green-50 text-green-800 border-green-200' 
-                        : 'bg-red-50 text-red-800 border-red-200'
-                    }`}>
-                      {submitStatus === 'success' ? (
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                      ) : (
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      )}
-                      <AlertDescription className="font-medium">
-                        {statusMessage}
-                      </AlertDescription>
-                    </Alert>
+                  {errors.name && (
+                    <span className="text-sm text-red-500 ml-2">{errors.name.message}</span>
                   )}
+                </div>
 
-                  {/* Submit Button */}
-                  <div className="flex justify-start mt-6">
-                    <ContactUsButton
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="px-8 py-4 bg-[#E0E5EC] text-[#4A5568] font-bold rounded-2xl shadow-neu-flat hover:bg-[#E0E5EC] hover:text-[#2d3748] active:shadow-neu-pressed active:scale-95 border-none h-auto text-lg disabled:opacity-50"
-                    >
-                      {isSubmitting ? 'Submitting...' : 'Submit'}
-                    </ContactUsButton>
+                {/* Email Input */}
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-lg font-semibold text-gray-700 ml-2">Email</Label>
+                  <div className="relative">
+                    <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500 z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <Input
+                      type="email"
+                      id="email"
+                      {...register('email')}
+                      className="clean-input text-gray-800 rounded-2xl pl-12 pr-4 py-4 text-lg h-auto focus-visible:ring-0 focus-visible:ring-offset-0"
+                      placeholder="your@email.com"
+                    />
                   </div>
-                </form>
-              </CardContent>
-            </ContactUsCard>
+                  {errors.email && (
+                    <span className="text-sm text-red-500 ml-2">{errors.email.message}</span>
+                  )}
+                </div>
+
+                {/* Phone Input */}
+                <div className="space-y-2">
+                  <Label htmlFor="phone" className="text-lg font-semibold text-gray-700 ml-2">
+                    Phone <span className="text-sm font-normal text-gray-500">(Optional)</span>
+                  </Label>
+                  <div className="relative">
+                    <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500 z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    <Input
+                      type="tel"
+                      id="phone"
+                      {...register('phone')}
+                      className="clean-input text-gray-800 rounded-2xl pl-12 pr-4 py-4 text-lg h-auto focus-visible:ring-0 focus-visible:ring-offset-0"
+                      placeholder="Phone Number"
+                    />
+                  </div>
+                  {errors.phone && (
+                    <span className="text-sm text-red-500 ml-2">{errors.phone.message}</span>
+                  )}
+                </div>
+
+                {/* Message Textarea */}
+                <div className="space-y-2">
+                  <Label htmlFor="query" className="text-lg font-semibold text-gray-700 ml-2">Message</Label>
+                  <div className="relative">
+                    <svg className="absolute left-4 top-4 w-5 h-5 text-blue-500 z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                    </svg>
+                    <Textarea
+                      id="query"
+                      {...register('query')}
+                      rows={5}
+                      className="clean-input text-gray-800 rounded-2xl pl-12 pr-4 py-4 text-lg resize-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                      placeholder="Tell us about your query or how we can help you..."
+                    />
+                  </div>
+                  {errors.query && (
+                    <span className="text-sm text-red-500 ml-2">{errors.query.message}</span>
+                  )}
+                </div>
+
+                {/* Status Message */}
+                {statusMessage && (
+                  <Alert className={`rounded-2xl border-0 ${
+                    submitStatus === 'success' 
+                      ? 'bg-green-50 text-green-700 border border-green-200' 
+                      : 'bg-red-50 text-red-700 border border-red-200'
+                  }`}>
+                    {submitStatus === 'success' ? (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    )}
+                    <AlertDescription className="font-medium text-lg">
+                      {statusMessage}
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                {/* Submit Button */}
+                <div className="pt-4">
+                  <ContactUsButton
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="clean-button w-full py-4 font-bold rounded-2xl text-lg border-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? (
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        Sending Message...
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center gap-2">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
+                        Send Message
+                      </div>
+                    )}
+                  </ContactUsButton>
+                </div>
+              </form>
+            </div>
           </div>
-
         </div>
-      </main>
-
-      
-     
+      </div>
     </div>
   );
 }
