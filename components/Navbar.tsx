@@ -26,36 +26,40 @@ const navItems: navItem[] = [
 
 export default function Navbar({ isLoggedIn = false, onSignOut }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
+
   return (
-    <nav className="relative bg-gray-900 shadow-lg ">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
-        <div className="flex justify-between items-center h-16 ">
+    /* 🔑 KEY FIX: absolute + transparent */
+    <nav className="absolute top-0 left-0 w-full z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+
+          {/* LOGO */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="text-2xl font-bold text-white z-55">
+            <span className="text-2xl font-bold text-white">
               SamaveshXVassaunt
-            </div>
+            </span>
           </Link>
+
+          {/* DESKTOP LINKS */}
           <div className="lg:flex items-center hidden">
-            <ul className="flex w-full justify-between gap-5">
-              {navItems.map((item, id) => {
-                return (
-                  <li
-                    key={id}
-                    className="text-white hover:text-gray-300 transition-colors"
-                  >
-                    <Link href={`${item.href}`}>{item.label}</Link>
-                  </li>
-                )
-              })}
+            <ul className="flex gap-5">
+              {navItems.map((item, id) => (
+                <li
+                  key={id}
+                  className="text-white hover:text-gray-300 transition-colors"
+                >
+                  <Link href={item.href}>{item.label}</Link>
+                </li>
+              ))}
             </ul>
           </div>
+
+          {/* DESKTOP AUTH */}
           <div className="lg:flex items-center hidden">
-            <ul className="flex w-full justify-between gap-5">
+            <ul className="flex gap-4">
               {isLoggedIn ? (
                 <li>
-                  <Link href="/signup">
-                    <Button onClick={() => onSignOut}>Logout</Button>
-                  </Link>
+                  <Button onClick={() => onSignOut}>Logout</Button>
                 </li>
               ) : (
                 <>
@@ -66,73 +70,58 @@ export default function Navbar({ isLoggedIn = false, onSignOut }: NavbarProps) {
                   </li>
                   <li>
                     <Link href="/login">
-                      <Button>login</Button>
+                      <Button>Login</Button>
                     </Link>
                   </li>
                 </>
               )}
             </ul>
           </div>
+
+          {/* MOBILE BUTTON */}
           <motion.div
-            className="lg:hidden cursor-pointer z-60 flex items-center justify-center"
+            className="lg:hidden cursor-pointer z-50 flex items-center justify-center"
             onClick={() => setIsMenuOpen((prev) => !prev)}
           >
-            <HamburgerButton height={60} width={60} isMenuOpen={isMenuOpen} />
+            <HamburgerButton height={48} width={48} isMenuOpen={isMenuOpen} />
           </motion.div>
+
+          {/* MOBILE MENU */}
           {isMenuOpen && (
             <motion.div
-              className="absolute right-0 top-0 w-64 rounded-lg bg-gray-900 pt-20 z-50 "
-              initial={{ y: '-100%' }}
-              animate={{ y: 0 }}
-              exit={{ y: '-100%' }}
+              className="absolute right-4 top-16 w-64 rounded-lg bg-gray-900 z-40"
+              initial={{ y: '-20%', opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: '-20%', opacity: 0 }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             >
-              <ul className="flex flex-col w-full gap-5 p-6">
-                {navItems.map((item, id) => {
-                  return (
-                    <li
-                      key={id}
-                      className="text-white hover:text-gray-300 transition-colors"
-                      onClick={() => {
-                        setIsMenuOpen(false)
-                      }}
-                    >
-                      <Link href={`${item.href}`}>{item.label}</Link>
-                    </li>
-                  )
-                })}
-                {isLoggedIn ? (
-                  <li className="pt-4 border-t border-gray-700">
-                    <Link href="/">
-                      <Button className="w-full mb-3" onClick={() => onSignOut}>
-                        Logout
-                      </Button>
-                    </Link>
+              <ul className="flex flex-col gap-5 p-6">
+                {navItems.map((item, id) => (
+                  <li
+                    key={id}
+                    className="text-white hover:text-gray-300 transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <Link href={item.href}>{item.label}</Link>
                   </li>
-                ) : (
-                  <>
-                    <li className="pt-4 border-t border-gray-700">
+                ))}
+
+                <div className="pt-4 border-t border-gray-700">
+                  {!isLoggedIn ? (
+                    <>
                       <Link href="/signup">
-                        <Button
-                          className="w-full mb-3"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          Register
-                        </Button>
+                        <Button className="w-full mb-3">Register</Button>
                       </Link>
-                    </li>
-                    <li>
                       <Link href="/login">
-                        <Button
-                          className="w-full"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          Login
-                        </Button>
+                        <Button className="w-full">Login</Button>
                       </Link>
-                    </li>
-                  </>
-                )}
+                    </>
+                  ) : (
+                    <Button className="w-full" onClick={() => onSignOut}>
+                      Logout
+                    </Button>
+                  )}
+                </div>
               </ul>
             </motion.div>
           )}

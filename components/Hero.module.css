@@ -1,0 +1,190 @@
+.content {
+  position: relative;
+  z-index: 3;
+  max-width: 720px;
+  padding: 120px 80px;
+  color: white;
+}
+.hero {
+  padding-top: 120px;
+}
+
+/* ========================= */
+/* TITLE + PARA BASE STYLES  */
+/* ========================= */
+
+.glitchTitle,
+.glitchPara {
+  position: relative;
+  color: white;
+}
+
+/* TITLE */
+.glitchTitle {
+  font-size: 64px;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+/* PARA */
+.glitchPara {
+  margin-top: 26px;
+  max-width: 520px;
+  font-size: 16px;
+  line-height: 1.6;
+  opacity: 0.75;
+}
+
+/* ========================= */
+/* DUPLICATE GLITCH LAYERS   */
+/* ========================= */
+
+.glitchTitle::before,
+.glitchTitle::after,
+.glitchPara::before,
+.glitchPara::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  width: 100%;
+  color: white;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* TITLE SLICE ZONES */
+.glitchTitle::before {
+  top: 0;
+  clip-path: inset(0 0 65% 0);
+}
+
+.glitchTitle::after {
+  top: 0;
+  clip-path: inset(40% 0 0 0);
+}
+
+/* PARA SLICE ZONES (lighter) */
+.glitchPara::before {
+  top: 0;
+  clip-path: inset(0 0 60% 0);
+  opacity: 0.5;
+}
+
+.glitchPara::after {
+  top: 0;
+  clip-path: inset(55% 0 0 0);
+  opacity: 0.4;
+}
+
+/* ========================= */
+/* ACTIVE GLITCH STATE       */
+/* ========================= */
+
+.active {
+  animation: jitter 0.06s steps(2) infinite;
+}
+
+.active::before {
+  animation: sliceTop 0.06s steps(2) infinite;
+}
+
+.active::after {
+  animation: sliceBottom 0.06s steps(2) infinite;
+}
+
+/* ========================= */
+/* KEYFRAMES — VIDEO STYLE   */
+/* ========================= */
+
+@keyframes jitter {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-6px, 2px);
+  }
+  40% {
+    transform: translate(6px, -2px);
+  }
+  60% {
+    transform: translate(-4px, 1px);
+  }
+  80% {
+    transform: translate(4px, -1px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+@keyframes sliceTop {
+  0% {
+    transform: translate(0);
+  }
+  50% {
+    transform: translate(-12px, -4px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+@keyframes sliceBottom {
+  0% {
+    transform: translate(0);
+  }
+  50% {
+    transform: translate(12px, 4px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+/* ========================= */
+/* 📱 MOBILE VIEW (IMPORTANT) */
+/* ========================= */
+
+@media (max-width: 768px) {
+  .content {
+    padding: 96px 24px;
+    max-width: 100%;
+  }
+
+  .glitchTitle {
+    font-size: 38px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .glitchPara {
+    font-size: 15px;
+    line-height: 1.55;
+    max-width: 100%;
+  }
+
+  /* Softer glitch for mobile (performance + readability) */
+  .active {
+    animation: jitter 0.08s steps(2) infinite;
+  }
+
+  .active::before,
+  .active::after {
+    animation-duration: 0.08s;
+  }
+}
+
+/* ========================= */
+/* 📱 VERY SMALL DEVICES     */
+/* ========================= */
+
+@media (max-width: 420px) {
+  .glitchTitle {
+    font-size: 32px;
+  }
+
+  .glitchPara {
+    font-size: 14px;
+  }
+}

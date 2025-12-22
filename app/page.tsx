@@ -1,9 +1,16 @@
-
+import styles from "./page.module.css";
+import Hero from "@/components/Hero";
+import GlitchBackground from "@/components/GlitchBackground";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#e0e5eb] font-sans">
-      
-    </div>
+    <main className={styles.landing}>
+      <GlitchBackground />
+
+      <div className={styles.main}>
+        <Hero />
+      </div>
+    </main>
   );
 }
+
