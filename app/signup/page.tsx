@@ -37,12 +37,6 @@ const i_serif = Roboto_Slab({
   fallback: ["sans-serif"],
 });
 
-const domine = Domine({
-  subsets: ["latin"],
-  weight: ["400"],
-  fallback: ["serif"],
-});
-
 const cd = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["400"],
@@ -160,8 +154,7 @@ export default function SignupPage() {
   };
 
   const validatePassword = () => {
-    const Passwords:string = (form.password).toString();
-    const res = SignupSchemaStep2.shape.password.safeParse(Passwords);
+    const res = SignupSchemaStep2.shape.password.safeParse(form.password);
     if (!res.success) {
       setPasswordError(false);
       setpassworderr(res.error.issues[0].message);
@@ -170,12 +163,9 @@ export default function SignupPage() {
     }
   };
 
-  const validateConfirmPassword = () => {
-    const ConfirmPasswords:string =(form.confirmPassword).toString();
-    const res = SignupSchemaStep2.shape.confirmPassword.safeParse(
-      ConfirmPasswords
-    );
-    if (!res.success) {
+  const validateConfirmPassword = ()=>{
+    const res = SignupSchemaStep2.shape.confirmPassword.safeParse(form.confirmPassword);
+    if(!res.success){
       setConfirmPasswordError(false);
       setconfirmpassworderr(res.error.issues[0].message);
     } else {
@@ -218,22 +208,12 @@ export default function SignupPage() {
   };
 
   const handleSendOTP = async () => {
-    const res = SignupSchemaStep1.safeParse({
-      name: form.name,
-      email: form.email,
-      phone: form.phone,
-    });
-    if (!res.success) {
-      const emailInValid: object | undefined = res.error.issues.find(
-        (issue) => issue.path[0] === "email"
-      );
-      const nameInValid: object | undefined = res.error.issues.find(
-        (issue) => issue.path[0] === "name"
-      );
-      const phoneInValid: object | undefined = res.error.issues.find(
-        (issue) => issue.path[0] === "phone"
-      );
-      if (emailInValid) {
+    const res = SignupSchemaStep2.safeParse({ name: form.name, email: form.email, phone: form.phone });
+    if(!res.success){
+      const emailInValid = res.error.issues.find((issue)=>issue.path[0]==="email");
+      const nameInValid = res.error.issues.find((issue)=>issue.path[0]==="name");
+      const phoneInValid = res.error.issues.find((issue)=>issue.path[0]==="phone");
+      if(emailInValid){
         setEmailError(false);
         setEmailErr(emailInValid.message);
       }
@@ -241,7 +221,7 @@ export default function SignupPage() {
         setNameError(false);
         setNameErr(nameInValid.message);
       }
-      if (phoneInValid) {
+      if  (phoneInValid)  {
         setPhoneError(false);
         setPhoneErr(phoneInValid.message);
       }
@@ -254,41 +234,14 @@ export default function SignupPage() {
       setStep(2);
       alert("OTP sent to your email. Please check and continue.");
     } catch (err: any) {
-      alert(err?.response?.data?.message || "Failed to send OTP");
+        alert(err?.response?.data?.message || "Failed to send OTP");
     } finally {
       setLoading(false);
     }
   };
 
   const handleSignup = async () => {
-    const res = SignupSchemaStep2.safeParse({
-      password: form.password,
-      confirmPassword: form.confirmPassword,
-    });
-    if (!res.success) {
-      const passwordInValid: object | undefined = res.error.issues.find(
-        (issue) => issue.path[0] === "email"
-      );
-      const confirmPasswordInvalid: object | undefined = res.error.issues.find(
-        (issue) => issue.path[0] === "name"
-      );
-      if (passwordInValid) {
-        setPasswordError(false);
-        setpassworderr(passwordInValid.message);
-      }
-      if (confirmPasswordInvalid) {
-        setConfirmPasswordError(false);
-        setconfirmpassworderr(confirmPasswordInvalid.message);
-      }
-      return;
-    }
-
-    if ((form.password) !== (form.confirmPassword)) {
-      setConfirmPasswordError(false);
-      setconfirmpassworderr("Passwords do not match.");
-      return;
-    }
-
+    if (!validateStep2()) return;
     setLoading(true);
     try {
       const payload = {
@@ -317,8 +270,8 @@ export default function SignupPage() {
         password: "",
         confirmPassword: "",
       });
-    } catch (err: any) {
-      alert(err?.response?.data?.message || "Signup failed");
+    } catch (error: any) {
+        alert(error?.response?.data.message || "Signup failed");
     } finally {
       setLoading(false);
     }
@@ -349,8 +302,8 @@ export default function SignupPage() {
         password: "",
         confirmPassword: "",
       });
-    } catch (err: any) {
-      alert(err?.response?.data?.message || "Google Sign-Up failed");
+    } catch (error: any) {
+        alert(error?.response?.data?.message || "Google Sign-Up failed");
     } finally {
       setLoading(false);
     }
@@ -593,6 +546,16 @@ export default function SignupPage() {
                         {phoneErr}
                       </motion.p>
                     )}
+                    {!phoneError && phoneErr && (
+                      <motion.p
+                        initial={{ y: -15, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: -15, opacity: 0 }}
+                        className="text-red-700 font-bold mt-2 cursor-default"
+                      >
+                        {phoneErr}
+                      </motion.p>
+                    )}
                   </AnimatePresence>
                 </div>
 
@@ -723,6 +686,7 @@ export default function SignupPage() {
                       borderRadius: "0.5rem",
                       "& fieldset": {
                         borderColor:
+                         
                           passwordError === false
                             ? "red"
                             : passwordError === true
@@ -802,6 +766,7 @@ export default function SignupPage() {
                       borderRadius: "0.5rem",
                       "& fieldset": {
                         borderColor:
+                         
                           confirmpasswordError === false
                             ? "red"
                             : confirmpasswordError === true

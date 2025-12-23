@@ -124,7 +124,7 @@ export default function Navbar({ isLoggedIn = false, onSignOut }: NavbarProps) {
                     <li>
                       <Link href="/login">
                         <Button
-                          className="w-full cursor-pointer"
+                          className="w-full"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           Login

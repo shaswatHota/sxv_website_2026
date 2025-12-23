@@ -1,6 +1,6 @@
 import api from "@/utils/api";
 
-export const sendOTP = (data: { email: string }) => api.post("api/auth/sendOTP", data);
+export const sendOTP = (data: { email: string }) => api.post("api/auth/api/auth/sendOTP", data);
 
 export const signup = (data: {
   name: string;
@@ -8,13 +8,13 @@ export const signup = (data: {
   password: string;
   otp: string;
   phone?: string;
-  institution?: "vssut" | "non_vssut";
+  institution?: string;
   gradYear?: string;
   branch?: string;
-}) => api.post("api/auth/signup", data);
+}) => api.post("api/auth/api/auth/signup", data);
 
 export const login = (data: { email: string; password: string }) =>
-  api.post("api/auth/login", data);
+  api.post("api/auth/api/auth/login", data);
 
 export const googleSignIn = (data: { credential: string }) =>
   api.post("/api/auth/google", data);
@@ -22,7 +22,7 @@ export const googleSignIn = (data: { credential: string }) =>
 export const googleSignUp = (data: { 
   credential: string; 
   phone?: string;
-  institution?: "vssut" | "non_vssut";
+  institution?: string;
   gradYear?: string;
   branch?: string;
 }) => api.post("/api/auth/google/signup", data);
