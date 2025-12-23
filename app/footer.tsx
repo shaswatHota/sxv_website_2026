@@ -86,6 +86,20 @@ export default function Footer({ className = "" }: FooterProps) {
             
             <ul className="space-y-3 font-['Shojumaru'] text-lg">
               <li className="group">
+                <Link href="/" className="flex items-center text-gray-500 hover:text-white transition-colors">
+                  <span className="w-0 group-hover:w-4 h-[1px] bg-[var(--shrine-red)] mr-0 group-hover:mr-2 transition-all duration-300"></span>
+                  <span className="font-['Shojumaru'] text-sm text-[var(--rust-brown)] mr-2 group-hover:text-[var(--shrine-red)] transition-colors">家</span>
+                  Home
+                </Link>
+              </li>
+              <li className="group">
+                <Link href="/events" className="flex items-center text-gray-500 hover:text-white transition-colors">
+                  <span className="w-0 group-hover:w-4 h-[1px] bg-[var(--shrine-red)] mr-0 group-hover:mr-2 transition-all duration-300"></span>
+                  <span className="font-['Shojumaru'] text-sm text-[var(--rust-brown)] mr-2 group-hover:text-[var(--shrine-red)] transition-colors">予定</span>
+                  Events
+                </Link>
+              </li>
+              <li className="group">
                 <Link href="/committees" className="flex items-center text-gray-500 hover:text-white transition-colors">
                   <span className="w-0 group-hover:w-4 h-[1px] bg-[var(--shrine-red)] mr-0 group-hover:mr-2 transition-all duration-300"></span>
                   <span className="font-['Shojumaru'] text-sm text-[var(--rust-brown)] mr-2 group-hover:text-[var(--shrine-red)] transition-colors">部門</span>
@@ -93,24 +107,17 @@ export default function Footer({ className = "" }: FooterProps) {
                 </Link>
               </li>
               <li className="group">
-                <Link href="/events" className="flex items-center text-gray-500 hover:text-white transition-colors">
+                <Link href="/team" className="flex items-center text-gray-500 hover:text-white transition-colors">
                   <span className="w-0 group-hover:w-4 h-[1px] bg-[var(--shrine-red)] mr-0 group-hover:mr-2 transition-all duration-300"></span>
-                  <span className="font-['Shojumaru'] text-sm text-[var(--rust-brown)] mr-2 group-hover:text-[var(--shrine-red)] transition-colors">予定</span>
-                  Schedule / Timeline
+                  <span className="font-['Shojumaru'] text-sm text-[var(--rust-brown)] mr-2 group-hover:text-[var(--shrine-red)] transition-colors">チーム</span>
+                  Team
                 </Link>
               </li>
               <li className="group">
-                <Link href="#" className="flex items-center text-gray-500 hover:text-white transition-colors">
+                <Link href="/contactUs" className="flex items-center text-gray-500 hover:text-white transition-colors">
                   <span className="w-0 group-hover:w-4 h-[1px] bg-[var(--shrine-red)] mr-0 group-hover:mr-2 transition-all duration-300"></span>
-                  <span className="font-['Shojumaru'] text-sm text-[var(--rust-brown)] mr-2 group-hover:text-[var(--shrine-red)] transition-colors">商品</span>
-                  Merchandise
-                </Link>
-              </li>
-              <li className="group">
-                <Link href="#" className="flex items-center text-gray-500 hover:text-white transition-colors">
-                  <span className="w-0 group-hover:w-4 h-[1px] bg-[var(--shrine-red)] mr-0 group-hover:mr-2 transition-all duration-300"></span>
-                  <span className="font-['Shojumaru'] text-sm text-[var(--rust-brown)] mr-2 group-hover:text-[var(--shrine-red)] transition-colors">画廊</span>
-                  Gallery
+                  <span className="font-['Shojumaru'] text-sm text-[var(--rust-brown)] mr-2 group-hover:text-[var(--shrine-red)] transition-colors">連絡</span>
+                  Contact Us
                 </Link>
               </li>
             </ul>
