@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { sendOTP, signup } from "@/services/auth";
 import SignupSchemaStep1 from "@/Schemas/SignupSchemaStep1";
 import SignupSchemaStep2 from "@/Schemas/signupSchemaStep2";
@@ -97,10 +97,16 @@ const lanternSway = {
 };
 
 export default function SignupPage() {
+  const [mounted, setMounted] = useState(false);
   const [step, setStep] = useState<number>(1);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+
+  // Hydration fix
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   
   // Error States
   const [nameError, setNameError] = useState<boolean | string>("");
@@ -134,6 +140,15 @@ export default function SignupPage() {
     password: "",
     confirmPassword: "",
   });
+
+  // Don't render until mounted to prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <div className={`min-h-screen flex justify-center items-center bg-black ${noto.variable} ${zen.variable} ${cinzel.variable}`}>
+        <div className="text-white font-cinzel">Loading...</div>
+      </div>
+    );
+  }
 
   // --- Validation Logic ---
   const validatePassword = () => {
@@ -338,21 +353,26 @@ export default function SignupPage() {
       <div className="absolute bottom-8 right-8 text-red-900/20 text-9xl font-zen writing-vertical-rl pointer-events-none select-none z-0">名誉</div>
 
        {/* --- LANTERNS --- */}
-      <motion.div variants={lanternSway} animate="animate" className="absolute left-[2%] lg:left-[5%] top-0 z-20 hidden sm:block origin-top">
-        <LanternSVG />
-      </motion.div>
-      <motion.div variants={lanternSway} animate="animate" className="absolute right-[2%] lg:right-[5%] top-0 z-20 hidden sm:block origin-top">
-        <LanternSVG />
-      </motion.div>
+      {mounted && (
+        <>
+          <motion.div variants={lanternSway} animate="animate" className="absolute left-[2%] lg:left-[5%] top-0 z-20 hidden sm:block origin-top">
+            <LanternSVG />
+          </motion.div>
+          <motion.div variants={lanternSway} animate="animate" className="absolute right-[2%] lg:right-[5%] top-0 z-20 hidden sm:block origin-top">
+            <LanternSVG />
+          </motion.div>
+        </>
+      )}
 
 
       {/* --- MAIN CARD --- */}
-      <motion.div 
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="w-full max-w-xl relative z-10"
-      >
+      {mounted ? (
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="w-full max-w-xl relative z-10"
+        >
         {/* Torii Gate Top Bar */}
         <div className="w-[108%] -ml-[4%] h-5 bg-[#7f1d1d] border border-[#450a0a] shadow-lg relative z-20 mb-[-12px] mx-auto rounded-sm flex items-center justify-center">
             <div className="w-full h-[1px] bg-[#991b1b]/50"></div>
@@ -455,7 +475,7 @@ export default function SignupPage() {
               </div>
 
               {/* Send OTP Button (Glitch) */}
-              <button type="button" onMouseDown={handleSendOTP} disabled={loading}
+              <button type="button" onClick={handleSendOTP} disabled={loading}
                 className="w-full h-12 mt-4 bg-gradient-to-r from-orange-900 to-red-900 hover:from-orange-800 hover:to-red-800 text-[#fff7ed] border border-orange-700/50 font-bold tracking-[0.2em] uppercase transition-all duration-300 hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] disabled:opacity-50 disabled:cursor-not-allowed glitch-btn group"
                 data-text-eng={loading ? "SENDING..." : "SEND OTP"}
               >
@@ -504,7 +524,7 @@ export default function SignupPage() {
                 <button type="button" onClick={() => setStep(1)} className="flex-1 py-3 border border-[#44403c] rounded-sm text-sm font-cinzel text-[#a8a29e] hover:border-[#d6d3d1] hover:text-[#d6d3d1] transition-colors">
                   BACK
                 </button>
-                <button type="button" onMouseDown={handleSignup} disabled={loading}
+                <button type="button" onClick={handleSignup} disabled={loading}
                     className="flex-[2] bg-[#dc2626] hover:bg-[#b91c1c] text-white border border-[#991b1b] font-bold tracking-[0.1em] uppercase transition-all duration-300 hover:shadow-[0_0_15px_rgba(220,38,38,0.5)] disabled:opacity-50 disabled:cursor-not-allowed glitch-btn"
                     data-text-eng={loading ? "JOINING..." : "REGISTER"}
                 >
@@ -524,6 +544,13 @@ export default function SignupPage() {
             <div className="h-6 w-3 bg-[#450a0a] opacity-80" />
         </div>
       </motion.div>
+      ) : (
+        <div className="w-full max-w-xl relative z-10">
+          <div className="bg-[#1c0505]/90 backdrop-blur-md border border-[#7f1d1d]/30 shadow-[0_0_60px_rgba(0,0,0,1)] p-8 md:p-10 relative">
+            <div className="text-center text-white font-cinzel">Loading...</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

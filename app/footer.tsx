@@ -46,9 +46,9 @@ export default function Footer({ className = "" }: FooterProps) {
             <div className="glitch-wrapper inline-block w-fit">
               <h2 
                 className="text-4xl font-black text-white font-['Orbitron'] tracking-tighter glitch-text" 
-                data-text="FESTIVAL.OS"
+                data-text="SAMAVESHxVASSAUNT"
               >
-                FESTIVAL<span className="text-[var(--shrine-red)]">.OS</span>
+                SAMAVESH<span className="text-[var(--shrine-red)]">x</span>VASSAUNT
               </h2>
             </div>
             
@@ -188,7 +188,7 @@ export default function Footer({ className = "" }: FooterProps) {
         {/* Bottom Bar */}
         <div className="mt-16 pt-6 border-t border-gray-900 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-['Shojumaru'] text-gray-600">
           <div className="flex items-center gap-4">
-            <span className="text-[var(--shrine-red)]">© 2025 FESTIVAL.OS</span>
+            <span className="text-[var(--shrine-red)]">© 2025 SAMAVESHxVASSAUNT</span>
             <span className="hidden md:inline text-gray-800">|</span>
             <span className="hover:text-white cursor-pointer transition-colors">PRIVACY_PROTOCOL</span>
           </div>

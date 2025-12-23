@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Shojumaru&family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;400;700;900&family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&family=Shippori+Mincho:wght@400;500;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -159,6 +160,103 @@ body {
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
+}
+
+/* Japanese Navbar Styles */
+.font-serif-jp { 
+  font-family: 'Noto Serif JP', serif; 
+}
+
+.font-sans-jp { 
+  font-family: 'Zen Kaku Gothic New', sans-serif; 
+}
+
+.font-shippori { 
+  font-family: 'Shippori Mincho', serif; 
+}
+
+/* Navbar Animations */
+@keyframes navSlideDown {
+  0% { transform: translateY(-100%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.nav-enter {
+  animation: navSlideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Sun Pulse Animation */
+@keyframes sunPulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(189, 0, 41, 0.4); 
+    transform: scale(1); 
+  }
+  50% { 
+    box-shadow: 0 0 50px rgba(189, 0, 41, 0.8); 
+    transform: scale(1.08); 
+  }
+}
+
+.sun-animate {
+  animation: sunPulse 3s ease-in-out infinite;
+}
+
+/* Red Line Sheen Effect */
+@keyframes sheen {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.red-line-sheen::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transform: translateX(-100%);
+  animation: sheen 3s infinite;
+}
+
+/* Text Pulse Animations */
+@keyframes textPulseMain {
+  0%, 100% { color: white; }
+  50% { color: #bd0029; }
+}
+
+@keyframes textPulseSub {
+  0%, 100% { color: #737373; } 
+  50% { color: white; }
+}
+
+.animate-text-main { 
+  animation: textPulseMain 3s ease-in-out infinite; 
+}
+
+.animate-text-sub { 
+  animation: textPulseSub 3s ease-in-out infinite; 
+}
+
+/* Mobile Menu Animations */
+@keyframes fadeInSlide {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-menu-item {
+  animation: fadeInSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  opacity: 0;
+}
+
+/* Utility Classes */
+.no-scrollbar::-webkit-scrollbar { 
+  display: none; 
+}
+
+.no-scrollbar { 
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
 }
 
 @keyframes fadeIn {

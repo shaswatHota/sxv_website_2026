@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Button from "@/components/Button";
 // Removed GoogleSignInButton import
@@ -90,6 +90,7 @@ const lanternSway = {
 }
 
 export default function LoginPage() {
+  const [mounted, setMounted] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -99,6 +100,20 @@ export default function LoginPage() {
   const [passwordErr, setpassworderr] = useState<string>("");
   const [emailErr, setEmailErr] = useState<string>("");
   const [error, setError] = useState("");
+
+  // Hydration fix
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Don't render until mounted to prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <div className={`min-h-screen flex justify-center items-center bg-black ${noto.variable} ${zen.variable} ${cinzel.variable}`}>
+        <div className="text-white font-cinzel">Loading...</div>
+      </div>
+    );
+  }
 
   const validatePassword = () => {
     const res = LoginSchema.shape.password.safeParse(password);
