@@ -1,49 +1,40 @@
 "use client";
 
-import { useState } from "react";
-import AuthInput from "@/components/AuthInput";
-import GoogleSignInButton from "@/components/GoogleSignInButton";
-import CustomDropdown from "@/components/CustomDropdown";
-import { sendOTP, signup, googleSignUp } from "@/services/auth";
+import { useState, useEffect } from "react";
+import { sendOTP, signup } from "@/services/auth";
 import SignupSchemaStep1 from "@/Schemas/SignupSchemaStep1";
 import SignupSchemaStep2 from "@/Schemas/signupSchemaStep2";
 import Link from "next/link";
 import { TextField, InputAdornment, IconButton } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
-  Prata,
-  Abril_Fatface,
-  Domine,
-  Roboto_Slab,
-  Cormorant_Garamond,
+  Noto_Serif_JP,
+  Zen_Tokyo_Zoo,
+  Cinzel,
 } from "next/font/google";
 import { motion, AnimatePresence } from "framer-motion";
+import { Sword, ChevronDown } from "lucide-react";
 
-const prata = Prata({
+// --- Typography ---
+const noto = Noto_Serif_JP({
   subsets: ["latin"],
-  weight: ["400"],
-  fallback: ["serif"],
+  weight: ["400", "700", "900"],
+  variable: "--font-noto",
 });
 
-const af = Abril_Fatface({
+const zen = Zen_Tokyo_Zoo({
   subsets: ["latin"],
   weight: ["400"],
-  fallback: ["mono"],
+  variable: "--font-zen",
 });
 
-const i_serif = Roboto_Slab({
+const cinzel = Cinzel({
   subsets: ["latin"],
-  weight: ["400"],
-  fallback: ["sans-serif"],
+  weight: ["400", "700", "900"],
+  variable: "--font-cinzel",
 });
 
-const cd = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400"],
-  fallback: ["serif"],
-  variable: "--font-cormorant-garamond",
-});
-
+// --- Constants ---
 const BRANCHES = [
   { value: "CSE", label: "Computer Science & Engineering" },
   { value: "CSE AI ML", label: "CSE - AI & Machine Learning" },
@@ -69,18 +60,60 @@ const YEARS = [
   { value: "2026", label: "2026" },
 ];
 
+// --- Visual Components ---
+
+const LanternSVG = () => (
+  <svg width="80" height="140" viewBox="0 0 80 140" fill="none" className="drop-shadow-[0_5px_15px_rgba(234,88,12,0.4)]">
+    <line x1="40" y1="0" x2="40" y2="20" stroke="#431407" strokeWidth="4" />
+    <path d="M10 30L40 20L70 30" stroke="#7c2d12" strokeWidth="4" fill="#431407" />
+    <rect x="15" y="30" width="50" height="10" fill="#431407" stroke="#7c2d12" strokeWidth="2"/>
+    <rect x="15" y="40" width="50" height="70" fill="url(#lanternGlowSignup)" stroke="#7c2d12" strokeWidth="3"/>
+    <line x1="15" y1="58" x2="65" y2="58" stroke="#7c2d12" strokeWidth="2" opacity="0.7"/>
+    <line x1="15" y1="75" x2="65" y2="75" stroke="#7c2d12" strokeWidth="2" opacity="0.7"/>
+    <line x1="15" y1="92" x2="65" y2="92" stroke="#7c2d12" strokeWidth="2" opacity="0.7"/>
+    <text x="40" y="80" textAnchor="middle" fill="#431407" fontSize="24" fontFamily="var(--font-zen)" opacity="0.8">登録</text>
+    <rect x="20" y="110" width="40" height="15" fill="#431407" stroke="#7c2d12" strokeWidth="2"/>
+    <circle cx="40" cy="130" r="5" fill="#ea580c" />
+    <defs>
+      <radialGradient id="lanternGlowSignup" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(40 75) rotate(90) scale(35 25)">
+        <stop stopColor="#fbbf24" />
+        <stop offset="0.8" stopColor="#ea580c" />
+        <stop offset="1" stopColor="#9a3412" />
+      </radialGradient>
+    </defs>
+  </svg>
+);
+
+const containerVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+};
+
+const lanternSway = {
+    animate: {
+        rotate: [-2, 2, -2],
+        transition: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+    }
+};
+
 export default function SignupPage() {
+  const [mounted, setMounted] = useState(false);
   const [step, setStep] = useState<number>(1);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+
+  // Hydration fix
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  // Error States
   const [nameError, setNameError] = useState<boolean | string>("");
   const [nameErr, setNameErr] = useState<string>("");
   const [emailError, setEmailError] = useState<boolean | string>("");
   const [emailErr, setEmailErr] = useState<string>("");
-  const [confirmpasswordError, setConfirmPasswordError] = useState<
-    boolean | string
-  >("");
+  const [confirmpasswordError, setConfirmPasswordError] = useState<boolean | string>("");
   const [confirmpasswordErr, setconfirmpassworderr] = useState<string>("");
   const [passwordError, setPasswordError] = useState<boolean | string>("");
   const [passwordErr, setpassworderr] = useState<string>("");
@@ -91,7 +124,7 @@ export default function SignupPage() {
     name: "",
     email: "",
     phone: "",
-    institution: "vssut", // vssut / non_vssut
+    institution: "vssut",
     gradYear: YEARS[0].value,
     branch: BRANCHES[0].value,
     otp: "",
@@ -108,54 +141,18 @@ export default function SignupPage() {
     confirmPassword: "",
   });
 
-  // helpers
-  const isValidEmail = (email: string) =>
-    /^\S+@\S+\.\S+$/.test(email.toLowerCase());
+  // Don't render until mounted to prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <div className={`min-h-screen flex justify-center items-center bg-black ${noto.variable} ${zen.variable} ${cinzel.variable}`}>
+        <div className="text-white font-cinzel">Loading...</div>
+      </div>
+    );
+  }
 
-  const isValidPhone = (phone: string) =>
-    /^\d{10}$/.test(phone.replace(/\s+/g, ""));
-
-  const validateStep1 = () => {
-    const errs = { name: "", email: "", phone: "" };
-    let ok = true;
-    if (!form.name.trim()) {
-      errs.name = "Please enter your name";
-      ok = false;
-    }
-    if (!isValidEmail(form.email)) {
-      errs.email = "Please enter a valid email";
-      ok = false;
-    }
-    if (!isValidPhone(form.phone)) {
-      errs.phone = "Phone number should be 10 digits";
-      ok = false;
-    }
-    setErrors((prev) => ({ ...prev, ...errs }));
-    return ok;
-  };
-
-  const validateStep2 = () => {
-    const errs = { otp: "", password: "", confirmPassword: "" };
-    let ok = true;
-    if (!form.otp.trim()) {
-      errs.otp = "OTP is required";
-      ok = false;
-    }
-    if (form.password.length < 6) {
-      errs.password = "Password should be at least 6 characters";
-      ok = false;
-    }
-    if (form.password !== form.confirmPassword) {
-      errs.confirmPassword = "Passwords do not match";
-      ok = false;
-    }
-    setErrors((prev) => ({ ...prev, ...errs }));
-    return ok;
-  };
-
+  // --- Validation Logic ---
   const validatePassword = () => {
-    const Passwords: string = form.password.toString();
-    const res = SignupSchemaStep2.shape.password.safeParse(Passwords);
+    const res = SignupSchemaStep2.shape.password.safeParse(form.password);
     if (!res.success) {
       setPasswordError(false);
       setpassworderr(res.error.issues[0].message);
@@ -165,9 +162,7 @@ export default function SignupPage() {
   };
 
   const validateConfirmPassword = () => {
-    const ConfirmPasswords: string = form.confirmPassword.toString();
-    const res =
-      SignupSchemaStep2.shape.confirmPassword.safeParse(ConfirmPasswords);
+    const res = SignupSchemaStep2.shape.confirmPassword.safeParse(form.confirmPassword);
     if (!res.success) {
       setConfirmPasswordError(false);
       setconfirmpassworderr(res.error.issues[0].message);
@@ -217,27 +212,12 @@ export default function SignupPage() {
       phone: form.phone,
     });
     if (!res.success) {
-      const emailInValid = res.error.issues.find(
-        (issue) => issue.path[0] === "email"
-      );
-      const nameInValid = res.error.issues.find(
-        (issue) => issue.path[0] === "name"
-      );
-      const phoneInValid = res.error.issues.find(
-        (issue) => issue.path[0] === "phone"
-      );
-      if (emailInValid) {
-        setEmailError(false);
-        setEmailErr(emailInValid.message);
-      }
-      if (nameInValid) {
-        setNameError(false);
-        setNameErr(nameInValid.message);
-      }
-      if (phoneInValid) {
-        setPhoneError(false);
-        setPhoneErr(phoneInValid.message);
-      }
+      const emailInValid = res.error.issues.find((issue) => issue.path[0] === "email");
+      const nameInValid = res.error.issues.find((issue) => issue.path[0] === "name");
+      const phoneInValid = res.error.issues.find((issue) => issue.path[0] === "phone");
+      if (emailInValid) { setEmailError(false); setEmailErr(emailInValid.message); }
+      if (nameInValid) { setNameError(false); setNameErr(nameInValid.message); }
+      if (phoneInValid) { setPhoneError(false); setPhoneErr(phoneInValid.message); }
       return;
     }
 
@@ -259,21 +239,12 @@ export default function SignupPage() {
       confirmPassword: form.confirmPassword,
     });
     if (!res.success) {
-      const passwordInValid = res.error.issues.find(
-        (issue) => issue.path[0] === "email"
-      );
-      const confirmPasswordInvalid = res.error.issues.find(
-        (issue) => issue.path[0] === "name"
-      );
-      if (passwordInValid) {
-        setPasswordError(false);
-        setpassworderr(passwordInValid.message);
-      }
-      if (confirmPasswordInvalid) {
-        setConfirmPasswordError(false);
-        setconfirmpassworderr(confirmPasswordInvalid.message);
-      }
-      return;
+        // Validation logic
+        const passwordInValid = res.error.issues.find((issue) => issue.path[0] === "password"); // Fixed path
+        const confirmPasswordInvalid = res.error.issues.find((issue) => issue.path[0] === "confirmPassword"); // Fixed path
+        if (passwordInValid) { setPasswordError(false); setpassworderr(passwordInValid.message); }
+        if (confirmPasswordInvalid) { setConfirmPasswordError(false); setconfirmpassworderr(confirmPasswordInvalid.message); }
+        return;
     }
 
     if (form.password !== form.confirmPassword) {
@@ -284,31 +255,14 @@ export default function SignupPage() {
 
     setLoading(true);
     try {
-      const payload = {
-        name: form.name,
-        email: form.email,
-        password: form.password,
-        otp: form.otp,
-        phone: form.phone,
-        institution: form.institution,
-        gradYear: form.gradYear,
-        branch: form.branch,
-      };
-
+      const payload = { ...form };
       await signup(payload);
       alert("Signup successful! Please login.");
-      // Optionally redirect to login or homepage
       setStep(1);
       setForm({
-        name: "",
-        email: "",
-        phone: "",
-        institution: "vssut",
-        gradYear: YEARS[0].value,
-        branch: BRANCHES[0].value,
-        otp: "",
-        password: "",
-        confirmPassword: "",
+        name: "", email: "", phone: "", institution: "vssut",
+        gradYear: YEARS[0].value, branch: BRANCHES[0].value,
+        otp: "", password: "", confirmPassword: "",
       });
     } catch (error: any) {
         alert(error?.response?.data.message || "Signup failed");
@@ -317,547 +271,286 @@ export default function SignupPage() {
     }
   };
 
-  const handleGoogleSuccess = async (credential: string) => {
-    setLoading(true);
-    try {
-      const payload = {
-        credential,
-        phone: form.phone,
-        institution: form.institution,
-        gradYear: form.gradYear,
-        branch: form.branch,
-      };
-      await googleSignUp(payload);
-      alert("Google Sign-Up successful! Please login.");
-      // Reset form and redirect
-      setStep(1);
-      setForm({
-        name: "",
-        email: "",
-        phone: "",
-        institution: "vssut",
-        gradYear: YEARS[0].value,
-        branch: BRANCHES[0].value,
-        otp: "",
-        password: "",
-        confirmPassword: "",
-      });
-    } catch (error: any) {
-        alert(error?.response?.data?.message || "Google Sign-Up failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // --- Styles ---
+  const textFieldStyles = (isError: boolean | string) => ({
+    width: "100%",
+    "& .MuiOutlinedInput-root": {
+      backgroundColor: "rgba(20, 5, 5, 0.7)",
+      borderRadius: "2px",
+      backdropFilter: "blur(4px)",
+      "& fieldset": {
+        borderColor: isError === false ? "#991b1b" : isError === true ? "#059669" : "#44403c",
+        borderWidth: "1px",
+        transition: "all 0.3s ease",
+      },
+      "&:hover fieldset": { borderColor: "#b91c1c" },
+      "&.Mui-focused fieldset": { borderColor: "#dc2626", boxShadow: "0 0 10px rgba(220, 38, 38, 0.3)" },
+    },
+    "& .MuiInputLabel-root": { color: "#a8a29e", fontFamily: "var(--font-noto)" },
+    "& .MuiOutlinedInput-root.Mui-focused .MuiInputLabel-root": { color: "#dc2626" },
+    "& .MuiOutlinedInput-input": { color: "#f5f5f4" },
+  });
 
-  const handleGoogleError = (error: string) => {
-    alert(error);
-  };
+  // Styles for Native Select to match TextField
+  const selectStyles = "w-full bg-[#140505]/70 text-[#f5f5f4] border border-[#44403c] rounded-sm px-3 py-3.5 focus:border-[#dc2626] focus:ring-1 focus:ring-[#dc2626] outline-none appearance-none font-noto cursor-pointer transition-colors hover:border-[#b91c1c]";
+
 
   return (
-    <div className="min-h-screen bg-black flex justify-center px-4 py-10">
-      <div className="w-full max-w-xl">
-        {/* Top stepper and title */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex space-x-3">
-            {[1, 2].map((s) => (
-              <button
-                key={s}
-                type="button"
-                className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold border transition-colors
-              ${
-                step >= s
-                  ? "bg-emerald-600 text-white border-emerald-600"
-                  : "bg-white text-gray-600 border-gray-300"
-              }`}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-          <span className="text-sm text-gray-500 cursor-default">
-            Step {step} of 2
-          </span>
+    <div className={`min-h-screen relative flex justify-center items-center px-4 py-10 overflow-hidden ${noto.variable} ${zen.variable} ${cinzel.variable}`}>
+       {/* --- CSS for Glitch --- */}
+       <style jsx global>{`
+            @keyframes glitch-skew {
+                0% { transform: skew(0deg); } 10% { transform: skew(3deg); }
+                20% { transform: skew(-3deg); } 30% { transform: skew(2deg); }
+                40% { transform: skew(-1deg); } 50% { transform: skew(0deg); } 100% { transform: skew(0deg); }
+            }
+            @keyframes glitch-text-switch {
+                0%, 49% { content: attr(data-text-eng); color: #fff7ed; }
+                50%, 65% { content: attr(data-text-jp); color: #fdba74; letter-spacing: 0.1em; }
+                66%, 100% { content: attr(data-text-eng); color: #fff7ed; }
+            }
+            @keyframes glitch-flash {
+                0% { opacity: 1; transform: translate(0); } 1% { opacity: 0.8; transform: translate(2px, -2px); }
+                2% { opacity: 1; transform: translate(0); } 50% { opacity: 1; transform: translate(0); }
+                51% { opacity: 0.8; transform: translate(-3px, 1px); } 52% { opacity: 1; transform: translate(0); } 100% { opacity: 1; transform: translate(0); }
+            }
+            .glitch-btn { position: relative; overflow: hidden; }
+            .glitch-btn .glitch-content::before {
+                content: attr(data-text-eng); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                display: flex; align-items: center; justify-content: center;
+                animation: glitch-text-switch 4s infinite step-end, glitch-skew 4s infinite ease-in-out;
+            }
+            .glitch-btn::after {
+                content: attr(data-text-eng); position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.5; color: cyan;
+                display: flex; align-items: center; justify-content: center; z-index: -1;
+                animation: glitch-flash 4s infinite steps(1); clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%); transform: translate(-2px, 0);
+            }
+            .glitch-btn::before {
+                content: attr(data-text-eng); position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.5; color: red;
+                display: flex; align-items: center; justify-content: center; z-index: -2;
+                animation: glitch-flash 4s infinite steps(1) reverse; clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%); transform: translate(2px, 0);
+            }
+            /* Custom Select Arrow */
+            .select-wrapper { position: relative; }
+            .select-wrapper svg { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #a8a29e; }
+        `}</style>
+
+      {/* --- BACKGROUND & OVERLAYS --- */}
+      <div 
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: "url('https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=2070&auto=format&fit=crop')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#2a0a0a]/90 via-[#450a0a]/70 to-black/95 mix-blend-multiply" />
+      <div className="absolute inset-0 z-0 bg-black/40" />
+
+      {/* --- DECORATIVE KANJI --- */}
+      <div className="absolute top-8 left-8 text-white/10 text-9xl font-zen writing-vertical-rl pointer-events-none select-none z-0">登録</div>
+      <div className="absolute bottom-8 right-8 text-red-900/20 text-9xl font-zen writing-vertical-rl pointer-events-none select-none z-0">名誉</div>
+
+       {/* --- LANTERNS --- */}
+      {mounted && (
+        <>
+          <motion.div variants={lanternSway} animate="animate" className="absolute left-[2%] lg:left-[5%] top-0 z-20 hidden sm:block origin-top">
+            <LanternSVG />
+          </motion.div>
+          <motion.div variants={lanternSway} animate="animate" className="absolute right-[2%] lg:right-[5%] top-0 z-20 hidden sm:block origin-top">
+            <LanternSVG />
+          </motion.div>
+        </>
+      )}
+
+
+      {/* --- MAIN CARD --- */}
+      {mounted ? (
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="w-full max-w-xl relative z-10"
+        >
+        {/* Torii Gate Top Bar */}
+        <div className="w-[108%] -ml-[4%] h-5 bg-[#7f1d1d] border border-[#450a0a] shadow-lg relative z-20 mb-[-12px] mx-auto rounded-sm flex items-center justify-center">
+            <div className="w-full h-[1px] bg-[#991b1b]/50"></div>
         </div>
-        <fieldset className="pb-8 px-[20px] md:px-8 pt-3 border-2 border-gray-500 rounded-2xl max-md:mx-[6.5px]">
-          <legend
-            className={`text-3xl font-bold ${prata.className} text-center cursor-default text-white`}
-          >
-            Signup
-          </legend>
-          <p
-            className={`text-lg text-center ${af.className} cursor-default text-gray-100 mb-5`}
-          >
-            Create your account
-          </p>
 
+        <div className="bg-[#1c0505]/90 backdrop-blur-md border-x border-b border-[#7f1d1d]/30 shadow-[0_0_60px_rgba(0,0,0,1)] p-8 md:p-10 relative">
+          
+          {/* Header & Stepper */}
+          <div className="mb-8">
+             <div className="flex justify-center items-center gap-4 mb-4">
+                {[1, 2].map((s) => (
+                    <div key={s} className="flex items-center gap-2">
+                        <div className={`w-8 h-8 flex items-center justify-center rounded-sm border-2 transform rotate-45 text-xs font-bold font-zen transition-all duration-300
+                            ${step >= s ? "bg-[#7f1d1d] border-[#ef4444] text-white shadow-[0_0_10px_#ef4444]" : "bg-transparent border-[#44403c] text-[#57534e]"}`}>
+                           <span className="-rotate-45">{s}</span>
+                        </div>
+                        {s === 1 && <div className="w-10 h-[1px] bg-[#44403c]"></div>}
+                    </div>
+                ))}
+             </div>
+             
+             <div className="text-center">
+                <h2 className="text-4xl font-zen text-[#e5e5e5] drop-shadow-md tracking-wider">SIGNUP</h2>
+                <div className="flex items-center justify-center gap-2 mt-2">
+                    <div className="h-[1px] w-6 bg-red-800"></div>
+                    <p className="text-[#dc2626] font-noto text-xs font-bold uppercase tracking-[0.3em]">アカウント作成</p>
+                    <div className="h-[1px] w-6 bg-red-800"></div>
+                </div>
+             </div>
+          </div>
+
+          <form onSubmit={(e) => e.preventDefault()}>
           {step === 1 && (
-            <>
-              <div className="space-y-6">
-                {/* Google Sign-Up */}
-                <GoogleSignInButton
-                  onSuccess={handleGoogleSuccess}
-                  onError={handleGoogleError}
-                  disabled={loading}
-                  text="Sign up with Google"
-                />
-
-                {/* Divider */}
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-300" />
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span
-                      className={`px-[6.5px] ${i_serif.className} cursor-default bg-black text-gray-200`}
-                    >
-                      Or continue with email
-                    </span>
-                  </div>
-                </div>
-                <div>
-                  <TextField
-                    label="Name*"
-                    id="name"
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    sx={{
-                      width: "100%",
-                      "& .MuiOutlinedInput-root": {
-                        backgroundColor: "black",
-                        borderRadius: "0.5rem",
-                        "& fieldset": {
-                          borderColor:
-                            nameError === false
-                              ? "red"
-                              : nameError === true
-                              ? "green"
-                              : "#6b7280",
-                        },
-                        "&:hover fieldset": {
-                          borderColor: "#6b7280",
-                        },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "white",
-                        },
-                      },
-                      "& .MuiInputLabel-root": {
-                        color: "#d1d5db",
-                      },
-                      "& .MuiOutlinedInput-root.Mui-focused .MuiInputLabel-root":
-                        {
-                          color: "gray.300",
-                        },
-                      "& .MuiOutlinedInput-input": {
-                        color: "#d1d5db",
-                      },
-                      "& .MuiOutlinedInput-input::placeholder": {
-                        color: "#d1d5db",
-                        opacity: 1,
-                      },
-                    }}
-                    onBlur={validateName}
-                  />
-                  <AnimatePresence>
-                    {!nameError && nameErr && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -15 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ opacity: 0, y: -15 }}
-                        className="text-red-700 font-bold mt-2 cursor-default"
-                      >
-                        {nameErr}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                <div>
-                  <TextField
-                    label="Email*"
-                    id="email"
-                    value={form.email}
-                    onChange={(e) =>
-                      setForm({ ...form, email: e.target.value })
-                    }
-                    sx={{
-                      width: "100%",
-                      "& .MuiOutlinedInput-root": {
-                        backgroundColor: "black",
-                        borderRadius: "0.5rem",
-                        "& fieldset": {
-                          borderColor:
-                            emailError === false
-                              ? "red"
-                              : emailError === true
-                              ? "green"
-                              : "#6b7280",
-                        },
-                        "&:hover fieldset": {
-                          borderColor: "#6b7280",
-                        },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "white",
-                        },
-                      },
-                      "& .MuiInputLabel-root": {
-                        color: "#d1d5db",
-                      },
-                      "& .MuiOutlinedInput-root.Mui-focused .MuiInputLabel-root":
-                        {
-                          color: "gray.300",
-                        },
-                      "& .MuiOutlinedInput-input": {
-                        color: "#d1d5db",
-                      },
-                      "& .MuiOutlinedInput-input::placeholder": {
-                        color: "#d1d5db",
-                        opacity: 1,
-                      },
-                    }}
-                    onBlur={validateEmail}
-                  />
-                  <AnimatePresence>
-                    {!emailError && emailErr && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -15 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -15 }}
-                        className="text-red-700 font-bold mt-2 cursor-default"
-                      >
-                        {emailErr}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                <div>
-                  <TextField
-                    label="Phone*"
-                    id="phone"
-                    value={form.phone}
-                    onChange={(e) =>
-                      setForm({ ...form, phone: e.target.value })
-                    }
-                    sx={{
-                      width: "100%",
-                      "& .MuiOutlinedInput-root": {
-                        backgroundColor: "black",
-                        borderRadius: "0.5rem",
-                        "& fieldset": {
-                          borderColor:
-                            phoneError === false
-                              ? "red"
-                              : phoneError === true
-                              ? "green"
-                              : "#6b7280",
-                        },
-                        "&:hover fieldset": {
-                          borderColor: "#6b7280",
-                        },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "white",
-                        },
-                      },
-                      "& .MuiInputLabel-root": {
-                        color: "#d1d5db",
-                      },
-                      "& .MuiOutlinedInput-root.Mui-focused .MuiInputLabel-root":
-                        {
-                          color: "gray.300",
-                        },
-                      "& .MuiOutlinedInput-input": {
-                        color: "#d1d5db",
-                      },
-                      "& .MuiOutlinedInput-input::placeholder": {
-                        color: "#d1d5db",
-                        opacity: 1,
-                      },
-                    }}
-                    onBlur={validatePhone}
-                  />
-                  <AnimatePresence>
-                    {!phoneError && phoneErr && (
-                      <motion.p
-                        initial={{ y: -15, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: -15, opacity: 0 }}
-                        className="text-red-700 font-bold mt-2 cursor-default"
-                      >
-                        {phoneErr}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-white mb-2">
-                    Institution
-                  </label>
-                  <div className="flex gap-3">
-                    {[
-                      { value: "vssut", label: "VSSUT" },
-                      { value: "non_vssut", label: "Non-VSSUT" },
-                    ].map((inst) => (
-                      <label
-                        key={inst.value}
-                        className={`flex items-center px-4 py-3 rounded-lg border cursor-pointer text-sm font-medium transition-colors
-                  ${
-                    form.institution === inst.value
-                      ? "border-emerald-500 bg-emerald-50 text-emerald-700"
-                      : "border-gray-300 hover:border-gray-400 text-white"
-                  }`}
-                      >
-                        <input
-                          type="radio"
-                          name="institution"
-                          value={inst.value}
-                          checked={form.institution === inst.value}
-                          onChange={(e) =>
-                            setForm({ ...form, institution: e.target.value })
-                          }
-                          className="mr-2"
-                        />
-                        {inst.label}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-white mb-1">
-                    Graduation Year
-                  </label>
-                  <CustomDropdown
-                    options={YEARS}
-                    value={form.gradYear}
-                    onChange={(value) => setForm({ ...form, gradYear: value })}
-                    placeholder="Select graduation year"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-white mb-1">
-                    Branch
-                  </label>
-                  <CustomDropdown
-                    options={BRANCHES}
-                    value={form.branch}
-                    onChange={(value) => setForm({ ...form, branch: value })}
-                    placeholder="Select your branch"
-                  />
-                </div>
-                <div className="flex justify-center gap-1 md:gap-[3px]">
-                  <p className="text-[15.5px] max-md:text-[14.5px] text-white font-medium md:font-semibold cursor-default">
-                    Already Registered?{" "}
-                  </p>
-                  <Link
-                    href="/login"
-                    className="max-md:text-[14.5px] text-[15.5px] text-emerald-600 hover:text-emerald-700 hover:underline focus:text-emerald-700 focus:underline font-medium md:font-semibold"
-                  >
-                    Login
-                  </Link>
-                </div>
-                <button
-                  onMouseDown={handleSendOTP}
-                  disabled={loading}
-                  className="w-full py-3 mt-4 rounded-lg cursor-pointer bg-emerald-600 text-white font-semibold hover:bg-emerald-700 disabled:bg-emerald-300 transition-colors shadow-sm"
-                >
-                  {loading ? "Sending..." : "Send OTP"}
-                </button>
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
+              
+              {/* Divider Sword */}
+              <div className="relative flex items-center justify-center py-1 mb-2">
+                <div className="flex-grow h-px bg-gradient-to-r from-transparent via-[#7f1d1d] to-transparent"></div>
+                <Sword size={20} className="text-[#7f1d1d] rotate-45 opacity-80 mx-3" />
+                <div className="flex-grow h-px bg-gradient-to-r from-transparent via-[#7f1d1d] to-transparent"></div>
               </div>
-            </>
+
+              {/* Name */}
+              <div className="relative">
+                <TextField label="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} sx={textFieldStyles(nameError)} onBlur={validateName} />
+                <AnimatePresence>{(!nameError && nameErr) && <motion.p initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="text-red-500 text-xs mt-1 font-noto pl-1">{nameErr}</motion.p>}</AnimatePresence>
+              </div>
+
+              {/* Email */}
+              <div className="relative">
+                <TextField label="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} sx={textFieldStyles(emailError)} onBlur={validateEmail} />
+                <AnimatePresence>{(!emailError && emailErr) && <motion.p initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="text-red-500 text-xs mt-1 font-noto pl-1">{emailErr}</motion.p>}</AnimatePresence>
+              </div>
+
+              {/* Phone */}
+              <div className="relative">
+                <TextField label="Phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} sx={textFieldStyles(phoneError)} onBlur={validatePhone} />
+                <AnimatePresence>{(!phoneError && phoneErr) && <motion.p initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="text-red-500 text-xs mt-1 font-noto pl-1">{phoneErr}</motion.p>}</AnimatePresence>
+              </div>
+
+              {/* Institution - Styled Radio/Tiles */}
+              <div>
+                <label className="block text-xs font-cinzel text-[#a8a29e] mb-2 uppercase tracking-wide">Institution</label>
+                <div className="flex gap-4">
+                  {[ { value: "vssut", label: "VSSUT" }, { value: "non_vssut", label: "Non-VSSUT" } ].map((inst) => (
+                    <label key={inst.value} className={`flex-1 flex items-center justify-center py-3 px-4 border rounded-sm cursor-pointer transition-all duration-300 font-cinzel text-sm
+                      ${form.institution === inst.value ? "border-[#dc2626] bg-[#dc2626]/10 text-[#dc2626] shadow-[0_0_10px_rgba(220,38,38,0.2)]" : "border-[#44403c] text-[#78716c] hover:border-[#7f1d1d]"}`}>
+                      <input type="radio" name="institution" value={inst.value} checked={form.institution === inst.value} onChange={(e) => setForm({ ...form, institution: e.target.value })} className="hidden" />
+                      {inst.label}
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Dropdowns - Row */}
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-1">
+                    <label className="block text-xs font-cinzel text-[#a8a29e] mb-1">Graduation Year</label>
+                    <div className="select-wrapper">
+                        <select value={form.gradYear} onChange={(e) => setForm({...form, gradYear: e.target.value})} className={selectStyles}>
+                            {YEARS.map(y => <option key={y.value} value={y.value} className="bg-[#1c0505] text-[#d6d3d1]">{y.label}</option>)}
+                        </select>
+                        <ChevronDown size={16} />
+                    </div>
+                </div>
+                <div className="flex-1">
+                    <label className="block text-xs font-cinzel text-[#a8a29e] mb-1">Branch</label>
+                    <div className="select-wrapper">
+                        <select value={form.branch} onChange={(e) => setForm({...form, branch: e.target.value})} className={selectStyles}>
+                            {BRANCHES.map(b => <option key={b.value} value={b.value} className="bg-[#1c0505] text-[#d6d3d1]">{b.label}</option>)}
+                        </select>
+                        <ChevronDown size={16} />
+                    </div>
+                </div>
+              </div>
+              
+              <div className="flex justify-center gap-1 md:gap-[3px] pt-2">
+                 <p className="text-sm text-[#78716c] font-cinzel">Already In?</p>
+                 <Link href="/login" className="text-sm text-[#dc2626] hover:text-[#ef4444] hover:underline font-cinzel font-bold">Login</Link>
+              </div>
+
+              {/* Send OTP Button (Glitch) */}
+              <button type="button" onClick={handleSendOTP} disabled={loading}
+                className="w-full h-12 mt-4 bg-gradient-to-r from-orange-900 to-red-900 hover:from-orange-800 hover:to-red-800 text-[#fff7ed] border border-orange-700/50 font-bold tracking-[0.2em] uppercase transition-all duration-300 hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] disabled:opacity-50 disabled:cursor-not-allowed glitch-btn group"
+                data-text-eng={loading ? "SENDING..." : "SEND OTP"}
+              >
+                <span className="invisible font-cinzel">{loading ? "SENDING..." : "SEND OTP"}</span>
+                <span className="glitch-content absolute inset-0 flex items-center justify-center font-cinzel text-sm" data-text-eng={loading ? "SENDING..." : "SEND OTP"} data-text-jp={loading ? "送信中..." : "コードを送信"}></span>
+              </button>
+
+            </motion.div>
           )}
 
           {step === 2 && (
-            <div className="space-y-6 mt-6">
+            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6 mt-4">
+              
+              {/* OTP Input - Custom Dark Style */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  OTP
-                </label>
-                <AuthInput
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-center tracking-widest focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                  placeholder="6 digits"
-                  value={form.otp}
-                  onChange={(e) => setForm({ ...form, otp: e.target.value })}
+                <label className="block text-xs font-cinzel text-[#a8a29e] mb-2 text-center">ENTER OTP CODE</label>
+                <input 
+                    type="text" 
+                    placeholder="• • • • • •" 
+                    value={form.otp} 
+                    onChange={(e) => setForm({ ...form, otp: e.target.value })}
+                    className="w-full bg-[#0a0a0a]/80 border border-[#44403c] text-[#dc2626] text-center text-2xl tracking-[0.5em] font-zen py-3 rounded-sm focus:border-[#dc2626] focus:outline-none focus:shadow-[0_0_15px_rgba(220,38,38,0.2)] placeholder-gray-800"
+                    maxLength={6}
                 />
-                {errors.otp && (
-                  <p className="mt-1 text-xs text-red-500">{errors.otp}</p>
-                )}
+                {errors.otp && <p className="mt-1 text-xs text-red-500 text-center">{errors.otp}</p>}
               </div>
 
-              <div>
-                <TextField
-                  label="Password*"
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  value={form.password}
-                  onChange={(e) =>
-                    setForm({ ...form, password: e.target.value })
-                  }
-                  autoComplete="current-password"
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setShowPassword(!showPassword)}
-                          edge="end"
-                          sx={{ color: "#d1d5db" }}
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                  sx={{
-                    width: "100%",
-                    "& .MuiOutlinedInput-root": {
-                      backgroundColor: "black",
-                      borderRadius: "0.5rem",
-                      "& fieldset": {
-                        borderColor:
-                          passwordError === false
-                            ? "red"
-                            : passwordError === true
-                            ? "green"
-                            : "#6b7280",
-                      },
-                      "&:hover fieldset": {
-                        borderColor: "#6b7280",
-                      },
-                      "&.Mui-focused fieldset": {
-                        borderColor: "white",
-                      },
-                    },
-                    "& .MuiInputLabel-root": {
-                      color: "#d1d5db",
-                    },
-                    "& .MuiOutlinedInput-root.Mui-focused .MuiInputLabel-root":
-                      {
-                        color: "gray.300",
-                      },
-                    "& .MuiOutlinedInput-input": {
-                      color: "#d1d5db",
-                    },
-                    "& .MuiOutlinedInput-input::placeholder": {
-                      color: "#d1d5db",
-                      opacity: 1,
-                    },
-                  }}
-                  onBlur={validatePassword}
-                />
-                <AnimatePresence>
-                  {!passwordError && passwordErr && (
-                    <motion.p
-                      initial={{ y: -15, opacity: 0 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ y: -15, opacity: 0 }}
-                      className="text-red-700 font-bold mt-2 cursor-default"
-                    >
-                      {passwordErr}
-                    </motion.p>
-                  )}
-                </AnimatePresence>
+              {/* Password */}
+              <div className="relative">
+                <TextField label="Password" type={showPassword ? "text" : "password"} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} 
+                  InputProps={{ endAdornment: (<InputAdornment position="end"><IconButton onClick={() => setShowPassword(!showPassword)} sx={{ color: "#78716c", "&:hover": { color: "#dc2626" } }}>{showPassword ? <VisibilityOff /> : <Visibility />}</IconButton></InputAdornment>)}}
+                  sx={textFieldStyles(passwordError)} onBlur={validatePassword} />
+                <AnimatePresence>{(!passwordError && passwordErr) && <motion.p initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="text-red-500 text-xs mt-1 font-noto pl-1">{passwordErr}</motion.p>}</AnimatePresence>
               </div>
 
-              <div>
-                <TextField
-                  label="Confirm Password*"
-                  id="currentpassword"
-                  name="currentpassword"
-                  type={showCurrentPassword ? "text" : "password"}
-                  value={form.confirmPassword}
-                  onChange={(e) =>
-                    setForm({ ...form, confirmPassword: e.target.value })
-                  }
-                  autoComplete="current-password"
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setShowCurrentPassword(!showPassword)}
-                          edge="end"
-                          sx={{ color: "#d1d5db" }}
-                        >
-                          {showCurrentPassword ? (
-                            <VisibilityOff />
-                          ) : (
-                            <Visibility />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                  sx={{
-                    width: "100%",
-                    "& .MuiOutlinedInput-root": {
-                      backgroundColor: "black",
-                      borderRadius: "0.5rem",
-                      "& fieldset": {
-                        borderColor:
-                          confirmpasswordError === false
-                            ? "red"
-                            : confirmpasswordError === true
-                            ? "green"
-                            : "#6b7280",
-                      },
-                      "&:hover fieldset": {
-                        borderColor: "#6b7280",
-                      },
-                      "&.Mui-focused fieldset": {
-                        borderColor: "white",
-                      },
-                    },
-                    "& .MuiInputLabel-root": {
-                      color: "#d1d5db",
-                    },
-                    "& .MuiOutlinedInput-root.Mui-focused .MuiInputLabel-root":
-                      {
-                        color: "gray.300",
-                      },
-                    "& .MuiOutlinedInput-input": {
-                      color: "#d1d5db",
-                    },
-                    "& .MuiOutlinedInput-input::placeholder": {
-                      color: "#d1d5db",
-                      opacity: 1,
-                    },
-                  }}
-                  onBlur={validateConfirmPassword}
-                />
-                <AnimatePresence>
-                  {!confirmpasswordError && confirmpasswordErr && (
-                    <motion.p
-                      initial={{ y: -15, opacity: 0 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ y: -15, opacity: 0 }}
-                      className="text-red-700 font-bold mt-2 cursor-default"
-                    >
-                      {confirmpasswordErr}
-                    </motion.p>
-                  )}
-                </AnimatePresence>
+              {/* Confirm Password */}
+              <div className="relative">
+                <TextField label="Confirm Password" type={showCurrentPassword ? "text" : "password"} value={form.confirmPassword} onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
+                  InputProps={{ endAdornment: (<InputAdornment position="end"><IconButton onClick={() => setShowCurrentPassword(!showCurrentPassword)} sx={{ color: "#78716c", "&:hover": { color: "#dc2626" } }}>{showCurrentPassword ? <VisibilityOff /> : <Visibility />}</IconButton></InputAdornment>)}}
+                  sx={textFieldStyles(confirmpasswordError)} onBlur={validateConfirmPassword} />
+                <AnimatePresence>{(!confirmpasswordError && confirmpasswordErr) && <motion.p initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="text-red-500 text-xs mt-1 font-noto pl-1">{confirmpasswordErr}</motion.p>}</AnimatePresence>
               </div>
-              <div className="flex gap-4">
-                <button
-                  type="button"
-                  onClick={() => setStep(1)}
-                  className="flex-1 py-3 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 cursor-pointer"
-                >
-                  Back
+
+              {/* Buttons Row */}
+              <div className="flex gap-4 pt-2">
+                <button type="button" onClick={() => setStep(1)} className="flex-1 py-3 border border-[#44403c] rounded-sm text-sm font-cinzel text-[#a8a29e] hover:border-[#d6d3d1] hover:text-[#d6d3d1] transition-colors">
+                  BACK
                 </button>
-                <button
-                  onMouseDown={handleSignup}
-                  disabled={loading}
-                  className="flex-1 py-3 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700 disabled:bg-emerald-300 text-sm shadow-sm cursor-pointer"
+                <button type="button" onClick={handleSignup} disabled={loading}
+                    className="flex-[2] bg-[#dc2626] hover:bg-[#b91c1c] text-white border border-[#991b1b] font-bold tracking-[0.1em] uppercase transition-all duration-300 hover:shadow-[0_0_15px_rgba(220,38,38,0.5)] disabled:opacity-50 disabled:cursor-not-allowed glitch-btn"
+                    data-text-eng={loading ? "JOINING..." : "REGISTER"}
                 >
-                  {loading ? "Signing up..." : "Complete Signup"}
+                    <span className="invisible font-cinzel text-sm">{loading ? "JOINING..." : "REGISTER"}</span>
+                    <span className="glitch-content absolute inset-0 flex items-center justify-center font-cinzel text-sm" data-text-eng={loading ? "JOINING..." : "REGISTER"} data-text-jp={loading ? "参加中..." : "完了"}></span>
                 </button>
               </div>
-            </div>
+            </motion.div>
           )}
-        </fieldset>
-      </div>
+          </form>
+
+        </div>
+
+        {/* Bottom "Feet" */}
+        <div className="flex justify-between w-[90%] mx-auto">
+            <div className="h-6 w-3 bg-[#450a0a] opacity-80" />
+            <div className="h-6 w-3 bg-[#450a0a] opacity-80" />
+        </div>
+      </motion.div>
+      ) : (
+        <div className="w-full max-w-xl relative z-10">
+          <div className="bg-[#1c0505]/90 backdrop-blur-md border border-[#7f1d1d]/30 shadow-[0_0_60px_rgba(0,0,0,1)] p-8 md:p-10 relative">
+            <div className="text-center text-white font-cinzel">Loading...</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

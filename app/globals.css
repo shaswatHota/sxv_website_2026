@@ -1,16 +1,30 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Shojumaru&family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;400;700;900&family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&family=Shippori+Mincho:wght@400;500;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
+  
+  /* Theme variables for compatibility */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  /* Cyberpunk Color Variables */
+  --cyber-black: #050202;
+  --cyber-dark: #0a0505;
+  --shrine-red: #a61818;
+  --blood-red: #5c0a0a;
+  --rust-brown: #8c6a5d;
+  --paper-white: #e6e6e6;
+  --ghost-white: #f8f8ff;
 }
+
+/* Theme variables moved to :root for compatibility */
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -23,6 +37,262 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cyber-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #331010;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--shrine-red);
+}
+
+/* Neon Glow Utilities */
+.text-glow-red {
+  text-shadow: 0 0 10px var(--shrine-red), 0 0 20px var(--blood-red);
+}
+
+.text-glow-white {
+  text-shadow: 0 0 5px var(--paper-white), 0 0 10px #ffffff;
+}
+
+.box-glow-red {
+  box-shadow: 0 0 15px rgba(166, 24, 24, 0.3), inset 0 0 10px rgba(166, 24, 24, 0.1);
+}
+
+/* CRT Scanline Effect */
+.scanlines {
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0),
+    rgba(0,0,0,0) 50%,
+    rgba(0,0,0,0.2) 50%,
+    rgba(0,0,0,0.2)
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  opacity: 0.6;
+}
+
+/* Glitch Animation */
+.glitch-wrapper {
+  position: relative;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--cyber-dark);
+}
+
+.glitch-text::before {
+  left: 2px;
+  text-shadow: -1px 0 var(--shrine-red);
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim 5s infinite linear alternate-reverse;
+}
+
+.glitch-text::after {
+  left: -2px;
+  text-shadow: -1px 0 var(--paper-white);
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim2 5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+  0% { clip: rect(35px, 9999px, 11px, 0); }
+  20% { clip: rect(68px, 9999px, 96px, 0); }
+  40% { clip: rect(15px, 9999px, 83px, 0); }
+  60% { clip: rect(2px, 9999px, 34px, 0); }
+  80% { clip: rect(59px, 9999px, 6px, 0); }
+  100% { clip: rect(93px, 9999px, 47px, 0); }
+}
+
+@keyframes glitch-anim2 {
+  0% { clip: rect(85px, 9999px, 36px, 0); }
+  20% { clip: rect(23px, 9999px, 2px, 0); }
+  40% { clip: rect(61px, 9999px, 91px, 0); }
+  60% { clip: rect(5px, 9999px, 73px, 0); }
+  80% { clip: rect(78px, 9999px, 14px, 0); }
+  100% { clip: rect(34px, 9999px, 55px, 0); }
+}
+
+/* Cyberpunk Clip Paths */
+.cyber-clip-tl {
+  clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
+}
+
+.cyber-clip-br {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+}
+
+/* Vertical Text */
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* Floating Animation */
+.float-anim {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Japanese Navbar Styles */
+.font-serif-jp { 
+  font-family: 'Noto Serif JP', serif; 
+}
+
+.font-sans-jp { 
+  font-family: 'Zen Kaku Gothic New', sans-serif; 
+}
+
+.font-shippori { 
+  font-family: 'Shippori Mincho', serif; 
+}
+
+/* Navbar Animations */
+@keyframes navSlideDown {
+  0% { transform: translateY(-100%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.nav-enter {
+  animation: navSlideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Sun Pulse Animation */
+@keyframes sunPulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(189, 0, 41, 0.4); 
+    transform: scale(1); 
+  }
+  50% { 
+    box-shadow: 0 0 50px rgba(189, 0, 41, 0.8); 
+    transform: scale(1.08); 
+  }
+}
+
+.sun-animate {
+  animation: sunPulse 3s ease-in-out infinite;
+}
+
+/* Red Line Sheen Effect */
+@keyframes sheen {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.red-line-sheen::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transform: translateX(-100%);
+  animation: sheen 3s infinite;
+}
+
+/* Text Pulse Animations */
+@keyframes textPulseMain {
+  0%, 100% { color: white; }
+  50% { color: #bd0029; }
+}
+
+@keyframes textPulseSub {
+  0%, 100% { color: #737373; } 
+  50% { color: white; }
+}
+
+.animate-text-main { 
+  animation: textPulseMain 3s ease-in-out infinite; 
+}
+
+.animate-text-sub { 
+  animation: textPulseSub 3s ease-in-out infinite; 
+}
+
+/* Mobile Menu Animations */
+@keyframes fadeInSlide {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-menu-item {
+  animation: fadeInSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  opacity: 0;
+}
+
+/* Utility Classes */
+.no-scrollbar::-webkit-scrollbar { 
+  display: none; 
+}
+
+.no-scrollbar { 
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
+}
+
+/* Washi Texture */
+.washi-texture {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+/* Katana Link Styling */
+.katana-link {
+  position: relative;
+  padding: 8px 12px;
+  transition: color 0.2s ease;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.katana-link:hover {
+  color: #fbbf24;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
+}
+
+/* Clip path for slanted buttons */
+.clip-path-slant {
+  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+}
+
+/* Flash effect */
+.flash-red { 
+  transition: background-color 0.1s; 
+}
+
+.flash-red:active { 
+  background-color: #bd0029; 
+  color: white; 
 }
 
 @keyframes fadeIn {

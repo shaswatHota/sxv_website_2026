@@ -1,0 +1,77 @@
+.hero {
+  position: absolute;    /* Changed from fixed to absolute */
+  inset: 0;             /* top:0 left:0 right:0 bottom:0 */
+  width: 100%;
+  height: 100%;         /* Changed from 100vh to 100% */
+  overflow: hidden;
+  background: black;
+  z-index: 0;           /* Background layer */
+}
+
+/* VIDEO */
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* SAME EDITORIAL DARK GRADIENT */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.65),
+    rgba(0, 0, 0, 0.35),
+    rgba(0, 0, 0, 0.15)
+  );
+  z-index: 1;
+}
+
+/* FILM GRAIN */
+.grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* PAGE GLITCH */
+.pageGlitch {
+  animation: pageJitter 0.06s steps(2) infinite;
+}
+
+@keyframes pageJitter {
+  0% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-4px, 2px);
+  }
+  40% {
+    transform: translate(4px, -2px);
+  }
+  60% {
+    transform: translate(-3px, 1px);
+  }
+  80% {
+    transform: translate(3px, -1px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* MOBILE OPTIMIZATION */
+@media (max-width: 768px) {
+  .grain {
+    opacity: 0.12;
+  }
+}
+
+

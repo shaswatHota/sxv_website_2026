@@ -1,107 +1,229 @@
 
+'use client';
+
 import Link from "next/link";
-import Image from "next/image";
+import { useState } from "react";
 
-export default function Footer() {
+interface FooterProps {
+  className?: string;
+}
+
+export default function Footer({ className = "" }: FooterProps) {
+  const [email, setEmail] = useState("");
+
+  const handleEmailSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle email subscription logic here
+    console.log("Email submitted:", email);
+    setEmail("");
+  };
+
   return (
-    <footer className="bg-[#e0e5eb] px-6 py-24">
-      <div className="mx-auto max-w-7xl">
+    <footer className={`relative bg-[var(--cyber-dark)] border-t-2 border-[var(--blood-red)] mt-auto ${className}`}>
+      {/* Top Decor Strip */}
+      <div className="absolute -top-[14px] left-0 w-full h-4 flex justify-between items-center px-4 md:px-12 pointer-events-none">
+        <div className="w-32 h-[2px] bg-[var(--shrine-red)]"></div>
+        <div className="bg-[var(--cyber-black)] border border-[var(--shrine-red)] px-4 py-1 text-[10px] text-[var(--shrine-red)] font-['Orbitron'] tracking-widest uppercase transform -skew-x-12">
+          System_Ready
+        </div>
+        <div className="w-full h-[1px] bg-gray-900 mx-4 relative">
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-[var(--shrine-red)] rotate-45"></div>
+        </div>
+      </div>
 
-        
-        <div className="rounded-3xl bg-gradient-to-br from-[#0b1022] via-[#070b18] to-[#040611] px-10 py-16 shadow-2xl">
-
+      {/* Main Footer Content */}
+      <div className="max-w-[1600px] mx-auto pt-16 pb-8 px-6 lg:px-12 relative z-10">
+        {/* Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
           
-          <div className="grid gap-16 lg:grid-cols-2 items-start">
-
-            
-            <div>
-              <Image
-                src="/logo.svg"
-                alt="Samavesh X Vassaunt Logo"
-                width={80}
-                height={80}
-                className="mb-6"
-                priority
-              />
-
-              <h2 className="max-w-md text-4xl font-light leading-tight text-white">
-                Samavesh X Vassaunt
-              </h2>
-
-              <p className="mt-6 text-sm text-zinc-400">
-                Made with <span className="text-red-500">❤</span> by Enigma VSSUT
-              </p>
+          {/* COL 1: Brand & Identity (4 Spans) */}
+          <div className="lg:col-span-4 flex flex-col gap-6 relative group">
+            {/* Decor Background Kanji */}
+            <div className="absolute -left-10 -top-10 text-9xl text-[var(--shrine-red)] opacity-[0.05] font-['Shojumaru'] pointer-events-none select-none">
+              未来
             </div>
-
             
-            <div className="text-zinc-300">
-
-              
-              <h4 className="mb-6 text-sm font-semibold uppercase tracking-wider text-white">
-                Quick Links
-              </h4>
-
-              <ul className="space-y-4 text-sm">
-                <li>
-                  <Link href="/" className="hover:text-white transition">
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/events" className="hover:text-white transition">
-                    Events
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/committee" className="hover:text-white transition">
-                    Committees
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/team" className="hover:text-white transition">
-                    The Team
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/contactUs" className="hover:text-white transition">
-                    Contact Us
-                  </Link>
-                </li>
-              </ul>
-
-              
-              <div className="mt-10">
-                <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-white">
-                  Follow Us
-                </h4>
-
-                <div className="flex gap-6 text-lg text-white">
-                  <span className="cursor-pointer hover:text-violet-400 transition">
-                    𝕏
-                  </span>
-                  <span className="cursor-pointer hover:text-violet-400 transition">
-                    f
-                  </span>
-                  <span className="cursor-pointer hover:text-violet-400 transition">
-                    ◎
-                  </span>
-                </div>
+            <div className="glitch-wrapper inline-block w-fit">
+              <h2 
+                className="text-4xl font-black text-white font-['Orbitron'] tracking-tighter glitch-text" 
+                data-text="SAMAVESHxVASSAUNT"
+              >
+                SAMAVESH<span className="text-[var(--shrine-red)]">x</span>VASSAUNT
+              </h2>
+            </div>
+            
+            <p className="text-gray-500 leading-relaxed font-['Shojumaru'] text-lg max-w-sm border-l-2 border-[var(--blood-red)] pl-4">
+              Bridging the gap between tradition and the digital frontier. Join the network of creators, gamers, and innovators.
+            </p>
+            
+            {/* Status Indicators */}
+            <div className="flex items-center gap-4 mt-2">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-[var(--paper-white)] rounded-full animate-pulse shadow-[0_0_10px_var(--paper-white)]"></span>
+                <span className="text-xs font-['Shojumaru'] text-[var(--paper-white)] tracking-widest">SERVER: ONLINE</span>
               </div>
-
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-[var(--shrine-red)] rounded-full shadow-[0_0_10px_var(--shrine-red)]"></span>
+                <span className="text-xs font-['Shojumaru'] text-[var(--shrine-red)] tracking-widest">SECURE</span>
+              </div>
             </div>
           </div>
 
-          
-          <div className="mt-16 h-px bg-white/10" />
+          {/* DIVIDER 1 (Desktop Only) */}
+          <div className="hidden lg:flex justify-center items-center col-span-1 relative">
+            <div className="h-full w-[1px] bg-gradient-to-b from-transparent via-[var(--blood-red)] to-transparent relative">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[var(--cyber-dark)] p-2 border border-[var(--blood-red)] rotate-45">
+                <span className="block -rotate-45 text-[var(--rust-brown)] font-['Shojumaru'] text-xs">壱</span>
+              </div>
+            </div>
+          </div>
 
-          
-          <p className="mt-6 text-center text-xs text-zinc-500">
-            © 2025. All Rights Reserved
-          </p>
+          {/* COL 2: Navigation Links (3 Spans) */}
+          <div className="lg:col-span-3 flex flex-col gap-6">
+            <h3 className="text-[var(--shrine-red)] font-['Shojumaru'] tracking-[0.2em] text-sm uppercase flex items-center gap-2">
+              <i className="fa-solid fa-torii-gate"></i> Directory
+            </h3>
+            
+            <ul className="space-y-3 font-['Shojumaru'] text-lg">
+              <li className="group">
+                <Link href="/" className="flex items-center text-gray-500 hover:text-white transition-colors">
+                  <span className="w-0 group-hover:w-4 h-[1px] bg-[var(--shrine-red)] mr-0 group-hover:mr-2 transition-all duration-300"></span>
+                  <span className="font-['Shojumaru'] text-sm text-[var(--rust-brown)] mr-2 group-hover:text-[var(--shrine-red)] transition-colors">家</span>
+                  Home
+                </Link>
+              </li>
+              <li className="group">
+                <Link href="/events" className="flex items-center text-gray-500 hover:text-white transition-colors">
+                  <span className="w-0 group-hover:w-4 h-[1px] bg-[var(--shrine-red)] mr-0 group-hover:mr-2 transition-all duration-300"></span>
+                  <span className="font-['Shojumaru'] text-sm text-[var(--rust-brown)] mr-2 group-hover:text-[var(--shrine-red)] transition-colors">予定</span>
+                  Events
+                </Link>
+              </li>
+              <li className="group">
+                <Link href="/committees" className="flex items-center text-gray-500 hover:text-white transition-colors">
+                  <span className="w-0 group-hover:w-4 h-[1px] bg-[var(--shrine-red)] mr-0 group-hover:mr-2 transition-all duration-300"></span>
+                  <span className="font-['Shojumaru'] text-sm text-[var(--rust-brown)] mr-2 group-hover:text-[var(--shrine-red)] transition-colors">部門</span>
+                  Committees
+                </Link>
+              </li>
+              <li className="group">
+                <Link href="/team" className="flex items-center text-gray-500 hover:text-white transition-colors">
+                  <span className="w-0 group-hover:w-4 h-[1px] bg-[var(--shrine-red)] mr-0 group-hover:mr-2 transition-all duration-300"></span>
+                  <span className="font-['Shojumaru'] text-sm text-[var(--rust-brown)] mr-2 group-hover:text-[var(--shrine-red)] transition-colors">チーム</span>
+                  Team
+                </Link>
+              </li>
+              <li className="group">
+                <Link href="/contactUs" className="flex items-center text-gray-500 hover:text-white transition-colors">
+                  <span className="w-0 group-hover:w-4 h-[1px] bg-[var(--shrine-red)] mr-0 group-hover:mr-2 transition-all duration-300"></span>
+                  <span className="font-['Shojumaru'] text-sm text-[var(--rust-brown)] mr-2 group-hover:text-[var(--shrine-red)] transition-colors">連絡</span>
+                  Contact Us
+                </Link>
+              </li>
+            </ul>
+          </div>
 
+          {/* DIVIDER 2 (Desktop Only) */}
+          <div className="hidden lg:flex justify-center items-center col-span-1 relative">
+            <div className="h-full w-[1px] bg-gradient-to-b from-transparent via-[var(--blood-red)] to-transparent relative">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[var(--cyber-dark)] p-2 border border-[var(--blood-red)] rotate-45">
+                <span className="block -rotate-45 text-[var(--rust-brown)] font-['Shojumaru'] text-xs">壱</span>
+              </div>
+            </div>
+          </div>
+
+          {/* COL 3: Social & Subscribe (3 Spans) */}
+          <div className="lg:col-span-3 flex flex-col gap-6">
+            <h3 className="text-[var(--rust-brown)] font-['Shojumaru'] tracking-[0.2em] text-sm uppercase flex items-center gap-2">
+              <i className="fa-solid fa-satellite-dish"></i> Uplink
+            </h3>
+            
+            {/* Social Hexagons */}
+            <div className="flex gap-4">
+              <a href="#" className="w-10 h-10 bg-black border border-gray-800 flex items-center justify-center text-gray-500 hover:border-[var(--shrine-red)] hover:text-[var(--shrine-red)] hover:shadow-[0_0_15px_rgba(166,24,24,0.5)] transition-all cyber-clip-tl">
+                <i className="fa-brands fa-discord"></i>
+              </a>
+              <a href="#" className="w-10 h-10 bg-black border border-gray-800 flex items-center justify-center text-gray-500 hover:border-[var(--paper-white)] hover:text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all cyber-clip-tl">
+                <i className="fa-brands fa-twitter"></i>
+              </a>
+              <a href="#" className="w-10 h-10 bg-black border border-gray-800 flex items-center justify-center text-gray-500 hover:border-[var(--rust-brown)] hover:text-[var(--rust-brown)] hover:shadow-[0_0_15px_rgba(140,106,93,0.5)] transition-all cyber-clip-tl">
+                <i className="fa-brands fa-instagram"></i>
+              </a>
+            </div>
+            
+            {/* Newsletter Input */}
+            <form onSubmit={handleEmailSubmit} className="relative mt-2">
+              <input 
+                type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="ENTER_EMAIL_ID" 
+                className="w-full bg-[var(--cyber-black)] border-b border-gray-800 text-white font-['Shojumaru'] py-2 pl-2 pr-10 focus:outline-none focus:border-[var(--shrine-red)] focus:bg-[#120505] transition-colors placeholder-gray-800 text-sm"
+              />
+              <button 
+                type="submit"
+                className="absolute right-0 top-0 h-full text-gray-600 hover:text-[var(--shrine-red)] transition-colors"
+              >
+                <i className="fa-solid fa-arrow-right"></i>
+              </button>
+            </form>
+            <p className="text-[10px] text-gray-700 font-['Shojumaru'] uppercase">
+              By subscribing, you agree to join the data stream.
+            </p>
+          </div>
+        </div>
+
+        {/* Japanese Vertical Decor (Absolute Left/Right) */}
+        <div className="absolute top-1/2 -translate-y-1/2 left-2 hidden 2xl:block opacity-40">
+          <div className="vertical-text text-[var(--shrine-red)] text-xs font-['Shojumaru'] tracking-[0.5em] drop-shadow-[0_0_5px_rgba(166,24,24,0.8)]">
+            東京暗黒街
+          </div>
+        </div>
+        <div className="absolute top-1/2 -translate-y-1/2 right-2 hidden 2xl:block opacity-40">
+          <div className="vertical-text text-gray-700 text-xs font-['Shojumaru'] tracking-[0.5em]">
+            神社接続
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="mt-16 pt-6 border-t border-gray-900 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-['Shojumaru'] text-gray-600">
+          <div className="flex items-center gap-4">
+            <span className="text-[var(--shrine-red)]">© 2025 SAMAVESHxVASSAUNT</span>
+            <span className="hidden md:inline text-gray-800">|</span>
+            <span className="hover:text-white cursor-pointer transition-colors">PRIVACY_PROTOCOL</span>
+          </div>
+          
+          {/* Decorative Barcode-ish lines */}
+          <div className="flex items-end gap-[2px] h-4 opacity-50">
+            <div className="w-[2px] h-full bg-[var(--paper-white)]"></div>
+            <div className="w-[2px] h-1/2 bg-gray-800"></div>
+            <div className="w-[2px] h-3/4 bg-gray-800"></div>
+            <div className="w-[2px] h-full bg-[var(--shrine-red)]"></div>
+            <div className="w-[2px] h-1/4 bg-gray-800"></div>
+            <div className="w-[2px] h-full bg-[var(--rust-brown)]"></div>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <span>DESIGNED IN</span>
+            <span className="text-white font-['Shojumaru']">日本</span>
+            <i className="fa-solid fa-bolt text-[var(--rust-brown)] animate-pulse"></i>
+          </div>
         </div>
       </div>
+
+      {/* Background Decor Assets */}
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-[var(--shrine-red)] opacity-[0.05] rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-[0.02] rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="scanlines"></div>
+
+      {/* Torii Gate Silhouette (Subtle) */}
+      <svg 
+        className="absolute bottom-0 right-10 w-32 h-auto opacity-[0.08] pointer-events-none" 
+        viewBox="0 0 100 100" 
+        fill="var(--shrine-red)"
+      >
+        <path d="M10,20 H90 V25 H80 V80 H85 V85 H75 V25 H25 V85 H15 V80 H20 V25 H10 Z M5,10 H95 V15 H5 Z" />
+      </svg>
     </footer>
   );
 }
-

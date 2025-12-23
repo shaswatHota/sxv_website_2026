@@ -1,0 +1,180 @@
+/* ========================= */
+/* IMPORT YOZAKURA REGULAR   */
+/* ========================= */
+
+@font-face {
+  font-family: 'Yozakura Regular';
+  src: url('/fonts/YOZAKURA-Regular.woff2') format('woff2'),
+       url('/fonts/YOZAKURA-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ========================= */
+/* HERO CONTAINER            */
+/* ========================= */
+
+.content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  padding: 0 80px;
+  color: white;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;  /* Changed from center to flex-start */
+  height: 100vh;
+  padding-top: 200px;           /* Added padding to move content up from top */
+  font-family: 'Yozakura Regular', 'Orbitron', 'Rajdhani', monospace, serif; /* Default font for all content */
+}
+
+.hero {
+  padding-top: 120px;
+}
+
+/* ========================= */
+/* TITLE CONTAINER           */
+/* ========================= */
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+/* ========================= */
+/* TEXT BASE STYLES          */
+/* ========================= */
+
+.glitchTitle,
+.glitchX {
+  font-size: 64px;
+  line-height: 1.05;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.02em;
+  font-family: 'Yozakura Regular', 'Orbitron', 'Rajdhani', monospace, serif; /* Ensure custom font is used */
+  font-weight: normal;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.glitchPara {
+  margin-top: 26px;
+  max-width: 520px;
+  font-size: 16px;
+  line-height: 1.6;
+  opacity: 0.75;
+  font-family: 'Rajdhani', system-ui, sans-serif; /* Use Rajdhani for paragraph */
+}
+
+/* ========================= */
+/* ENGLISH FONT (YOZAKURA)   */
+/* ========================= */
+
+.englishFont .glitchTitle,
+.englishFont .glitchX {
+  font-family: 'Yozakura Regular', 'Orbitron', 'Rajdhani', monospace, serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: normal;
+}
+
+/* Paragraph stays readable */
+.englishFont .glitchPara {
+  font-family: 'Rajdhani', system-ui, sans-serif;
+  letter-spacing: 0.05em;
+}
+
+/* ========================= */
+/* FONT LOADING STATES       */
+/* ========================= */
+
+.fontLoading .glitchTitle,
+.fontLoading .glitchX {
+  visibility: hidden; /* Hide until font loads to prevent flash */
+}
+
+.fontLoaded .glitchTitle,
+.fontLoaded .glitchX {
+  visibility: visible;
+  animation: fadeInFont 0.3s ease-in;
+}
+
+@keyframes fadeInFont {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ========================= */
+/* PER-LETTER GLITCH         */
+/* ========================= */
+
+.char {
+  display: inline-block;
+  position: relative;
+}
+
+/* Active glitch letters */
+.char.glitch {
+  animation: charJitter 0.08s steps(2) infinite;
+}
+
+/* ========================= */
+/* KEYFRAMES                 */
+/* ========================= */
+
+@keyframes charJitter {
+  0%   { transform: translate(0); }
+  20%  { transform: translate(-2px, 1px); }
+  40%  { transform: translate(2px, -1px); }
+  60%  { transform: translate(-1px, 1px); }
+  80%  { transform: translate(1px, -1px); }
+  100% { transform: translate(0); }
+}
+
+/* ========================= */
+/* MOBILE                    */
+/* ========================= */
+
+@media (max-width: 768px) {
+  .content {
+    padding: 0 24px;
+    padding-top: 160px;  /* Adjusted for mobile */
+  }
+
+  .glitchTitle,
+  .glitchX {
+    font-size: 38px;
+  }
+
+  .glitchPara {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 420px) {
+  .content {
+    padding: 0 16px;
+    padding-top: 140px;  /* Adjusted for small mobile */
+  }
+
+  .glitchTitle,
+  .glitchX {
+    font-size: 32px;
+  }
+
+  .glitchPara {
+    font-size: 14px;
+  }
+}

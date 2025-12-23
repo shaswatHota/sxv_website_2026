@@ -24,6 +24,7 @@ export default function Button({
       {...rest}
       disabled={disabled}
       className={`${base} ${variantClass} ${className}`}
+      suppressHydrationWarning={true}
     >
       {children}
     </button>

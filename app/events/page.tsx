@@ -1,257 +1,237 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect } from 'react';
+import { Clock, MapPin, Calendar, ChevronDown, Zap, Theater, Gamepad2, Sparkles, X } from 'lucide-react';
+import eventsData from "@/events-temp.json";
+import { EventItems } from "@/types/Event";
 
-import eventsData from "@/events-temp.json"
-import Card from "@/components/Card"
-import { EventItems } from "@/types/Event"
+type ScrollOption = { id: string; label?: string; icon?: React.ComponentType<any> };
+type StyledEvent = EventItems & { image: string; japaneseTitle: string };
 
-const CATEGORIES = ["Technical", "Cultural", "Fun"]
-const DAYS = ["Day 1", "Day 2", "Day 3"]
+const CATEGORY_ICONS: Record<string, any> = {
+  Technical: Zap,
+  Cultural: Theater,
+  "E-Sports": Gamepad2,
+  Fun: Sparkles,
+};
 
+const CATEGORIES: ScrollOption[] = (eventsData.eventMeta?.categories || []).map((cat) => ({
+  id: cat,
+  icon: CATEGORY_ICONS[cat] || Sparkles,
+  label: cat,
+}));
 
-export default function EventsPage() {
-  const [activeCategory, setActiveCategory] = useState("Technical")
-  const [activeDay, setActiveDay] = useState("Day 1")
-  const [selectedEvent, setSelectedEvent] = useState<EventItems | null>(null)
-  const modalContentRef = useRef<HTMLDivElement>(null)
-  const categoryRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({})
-  const dayRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({})
-  const [categoryIndicatorStyle, setCategoryIndicatorStyle] = useState({ left: 0, width: 0 })
-  const [dayIndicatorStyle, setDayIndicatorStyle] = useState({ top: 0, height: 0 })
+const DAYS = eventsData.eventMeta?.days || Array.from(new Set(eventsData.events.map((event) => event.day)));
 
-  const filteredEvents = eventsData.events.filter(
-    (event) =>
-      event.category === activeCategory &&
-      event.day === activeDay
-  )
+const EVENTS_DATA: StyledEvent[] = eventsData.events.map(
+  (event: EventItems & { image?: string; japaneseTitle?: string }) => ({
+    ...event,
+    image:
+      event.image ||
+      "https://placehold.co/600x400/050000/050000?text=SxV",
+    japaneseTitle: event.japaneseTitle || event.title,
+  })
+);
 
-  
+const GlitchHeader = () => {
+  const [text, setText] = useState("EVENTS");
+  const [glitching, setGlitching] = useState(false);
+
   useEffect(() => {
-    const activeButton = categoryRefs.current[activeCategory]
-    if (activeButton) {
-      const { offsetLeft, offsetWidth } = activeButton
-      setCategoryIndicatorStyle({ left: offsetLeft, width: offsetWidth })
-    }
-  }, [activeCategory])
-
-
-  useEffect(() => {
-    const activeButton = dayRefs.current[activeDay]
-    if (activeButton) {
-      const { offsetTop, offsetHeight } = activeButton
-      setDayIndicatorStyle({ top: offsetTop, height: offsetHeight })
-    }
-  }, [activeDay])
-
-  
-  useEffect(() => {
-    const activeCategoryButton = categoryRefs.current[activeCategory]
-    if (activeCategoryButton) {
-      const { offsetLeft, offsetWidth } = activeCategoryButton
-      setCategoryIndicatorStyle({ left: offsetLeft, width: offsetWidth })
-    }
-    
-    const activeDayButton = dayRefs.current[activeDay]
-    if (activeDayButton) {
-      const { offsetTop, offsetHeight } = activeDayButton
-      setDayIndicatorStyle({ top: offsetTop, height: offsetHeight })
-    }
-  }, [])
-
-  
-  useEffect(() => {
-    if (selectedEvent && modalContentRef.current) {
-      modalContentRef.current.scrollTo({ top: 0, behavior: 'smooth' })
-    }
-  }, [selectedEvent])
+    const interval = setInterval(() => {
+      setGlitching(true);
+      setTimeout(() => {
+        setText(prev => prev === "EVENTS" ? "行事" : "EVENTS");
+      }, 150);
+      setTimeout(() => setGlitching(false), 300);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <>
-      <section className="min-h-screen bg-[#E0E5EC] text-[#4A5568] px-6 py-16 scroll-smooth">
-        
-        <h1 className="text-center text-5xl mb-12">
-          Event Timeline
-        </h1>
+    <div className="relative text-center mb-8 mt-6 z-10">
+      <h1 className={`text-5xl md:text-7xl font-cinzel font-bold tracking-widest transition-colors duration-100 ${glitching ? 'text-[#b30000] translate-x-1' : 'text-[#b30000]'}`}>
+        {text}
+      </h1>
+      <div className="h-0.5 w-16 bg-[#d4af37] mx-auto mt-3 shadow-[0_0_15px_rgba(212,175,55,0.6)]"></div>
+      <p className="mt-2 text-[#d4af37] tracking-[0.5em] text-xs uppercase font-cinzel opacity-80">Samavesh X Vassaunt</p>
+    </div>
+  );
+};
 
-        <div className="flex justify-center gap-10 mb-14 relative">
-          {CATEGORIES.map((cat) => (
+const ScrollSelector = ({
+  title,
+  options,
+  selected,
+  onSelect,
+  type = 'text',
+}: {
+  title: string;
+  options: Array<ScrollOption | string>;
+  selected: string;
+  onSelect: (value: string) => void;
+  type?: 'text' | 'icon';
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="relative w-full md:w-56 z-40 mx-auto">
+      {/* Scroll Head - Crimson Red with gold-ish accent text */}
+      <div 
+        onClick={() => setIsOpen(!isOpen)}
+        className="cursor-pointer relative h-12 bg-gradient-to-b from-[#600000] via-[#3a0000] to-[#600000] border-y border-[#d4af37]/60 flex items-center justify-between px-4 shadow-lg rounded-sm group hover:brightness-125 transition-all"
+      >
+        <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-14 bg-gradient-to-r from-[#d4af37] to-[#8a6d1f] rounded-l-sm shadow-md border-r border-black/50"></div>
+        <div className="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-14 bg-gradient-to-l from-[#d4af37] to-[#8a6d1f] rounded-r-sm shadow-md border-l border-black/50"></div>
+        
+        <span className="text-[#ffdbdb] font-cinzel font-bold text-sm tracking-wide group-hover:text-white transition-colors truncate w-full text-center uppercase">
+             {selected}
+        </span>
+        
+        <ChevronDown size={14} className={`text-[#d4af37] absolute right-3 transition-transform duration-500 ${isOpen ? 'rotate-180' : ''}`} />
+      </div>
+
+      {/* Unrolling Paper Body */}
+      <div 
+        className={`absolute top-11 left-2 right-2 overflow-hidden transition-all duration-500 ease-out shadow-[0_10px_40px_rgba(0,0,0,0.8)] origin-top z-10 ${isOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'}`}
+        style={{ 
+            backgroundColor: '#f0e6d2', 
+            backgroundImage: `url("https://www.transparenttextures.com/patterns/rice-paper.png")`,
+        }}
+      >
+        <div className="py-2 flex flex-col relative">
+          {options.map((opt) => {
+            const optionId = typeof opt === "string" ? opt : opt.id;
+            const optionLabel = typeof opt === "string" ? opt : opt.label || opt.id;
+            const Icon = typeof opt === "string" ? null : opt.icon;
+            return (
             <button
-              key={cat}
-              ref={(el) => { categoryRefs.current[cat] = el }}
-              onClick={() => setActiveCategory(cat)}
-              className={`uppercase tracking-wide pb-2 relative z-10 transition-colors duration-300
-                ${
-                  activeCategory === cat
-                    ? "text-[#4A5568]"
-                    : "text-zinc-500 hover:text-[#2d3748]"
-                }
-              `}
-            >
-              {cat}
-            </button>
-          ))}
-          
-          <div
-            className="absolute bottom-0 h-[2px] bg-[#2d3748] transition-all duration-500 ease-in-out"
-            style={{
-              left: `${categoryIndicatorStyle.left}px`,
-              width: `${categoryIndicatorStyle.width}px`,
-            }}
-          />
-        </div>
-
-        
-        <div className="grid grid-cols-[120px_1fr] gap-10 max-w-7xl mx-auto">
-
-          
-          <div className="flex flex-col gap-8 text-[#4A5568]/70 relative">
-            {DAYS.map((day) => (
-              <button
-                key={day}
-                ref={(el) => { dayRefs.current[day] = el }}
-                onClick={() => setActiveDay(day)}
-                className={`text-left uppercase tracking-wide relative pl-4 transition-colors duration-300 z-10
-                  ${
-                    activeDay === day
-                      ? "text-[#4A5568]"
-                      : "hover:text-[#2d3748]"
-                  }
-                `}
-              >
-                {day}
-              </button>
-            ))}
-            
-            <div
-              className="absolute left-0 w-[2px] bg-[#2d3748] transition-all duration-500 ease-in-out"
-              style={{
-                top: `${dayIndicatorStyle.top}px`,
-                height: `${dayIndicatorStyle.height}px`,
+              key={optionId}
+              onClick={() => {
+                onSelect(optionId);
+                setIsOpen(false);
               }}
-            />
-          </div>
-
-          
-          <div
-            key={`${activeCategory}-${activeDay}`}
-            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-[fadeInSlide_0.4s_ease-out]"
-          >
-            {filteredEvents.length === 0 && (
-              <p className="text-zinc-500 col-span-full">
-                No events scheduled for this day.
-              </p>
-            )}
-
-            {filteredEvents.map((event) => (
-              <Card
-                key={event.id}
-                clickable
-                classname="bg-[#f6f8fb] text-[#2d3748] border border-[#d7dee8] shadow-md shadow-[#c7ced8] transition-transform duration-200 hover:scale-105 hover:shadow-lg hover:shadow-[#c1c9d4] cursor-pointer"
-                onClick={() => {
-                  setSelectedEvent(event)
-                  
-                  window.scrollTo({ top: 0, behavior: 'smooth' })
-                }}
-              >
-                <h3 className="text-lg font-semibold mb-2">
-                  {event.title}
-                </h3>
-
-                <p className="text-sm text-[#4A5568]/90 mb-3">
-                  {event.shortDescription}
-                </p>
-
-                <div className="text-xs text-[#4A5568]/80 space-y-1">
-                  <p>{event.time}</p>
-                  <p>{event.venue}</p>
-                  <p className="italic">{event.organizingClub}</p>
+              className={`text-left px-4 py-3 font-cinzel font-bold text-xs transition-all flex items-center justify-between border-b border-[#d4af37]/20 ${
+                (selected === optionId) 
+                  ? 'bg-red-900/10 text-red-900' 
+                  : 'text-[#4a0000] hover:bg-[#e6dcc5] hover:tracking-wider'
+              }`}
+            >
+                <div className="flex items-center gap-2">
+                    {Icon && <Icon className="w-3.5 h-3.5" />}
+                    <span>{optionLabel}</span>
                 </div>
-              </Card>
-            ))}
-          </div>
-
+                {(selected === optionId) && <div className="w-1.5 h-1.5 rounded-full bg-red-600"></div>}
+            </button>
+          )})}
         </div>
-      </section>
+        <div className="h-3 w-full bg-[#f0e6d2]" style={{ clipPath: 'polygon(0 0, 100% 0, 95% 100%, 85% 60%, 75% 100%, 65% 60%, 55% 100%, 45% 60%, 35% 100%, 25% 60%, 15% 100%, 5% 60%, 0 100%)' }}></div>
+      </div>
+    </div>
+  );
+};
 
+const EventCard = ({ event }: { event: StyledEvent }) => {
+  const [flipped, setFlipped] = useState(false);
 
-      {selectedEvent && (
-        <div 
-          className="fixed inset-0 bg-black/10 backdrop-blur-sm flex items-center justify-center z-50 p-6 transition-opacity duration-300 animate-[fadeIn_0.3s_ease-in-out]"
-          onClick={() => setSelectedEvent(null)}
-        >
-          <div 
-            ref={modalContentRef}
-            className="bg-[#E0E5EC] border-none shadow-neu-flat rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto scroll-smooth transition-all duration-300 animate-[slideUp_0.3s_ease-out]"
-            onClick={(e) => e.stopPropagation()}
-            style={{ scrollBehavior: 'smooth' }}
-          >
-
-            <div className="w-full h-64 bg-[#cfd6df] flex items-center justify-center">
-              <img 
-                src="https://placehold.co/600x400?text=Thamba\nLoading..." 
-                alt={selectedEvent.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-
-            <div className="p-8 bg-[#f6f8fb]">
-              <h2 className="text-3xl font-bold mb-4 text-[#2d3748] ">{selectedEvent.title}</h2>
-              
-              <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
-                <div>
-                  <p className="text-[#4A5568]/70">Time</p>
-                  <p className="text-[#2d3748]">{selectedEvent.time}</p>
-                </div>
-                <div>
-                  <p className="text-[#4A5568]/70">Venue</p>
-                  <p className="text-[#2d3748]">{selectedEvent.venue}</p>
-                </div>
-                <div>
-                  <p className="text-[#4A5568]/70">Category</p>
-                  <p className="text-[#2d3748]">{selectedEvent.category}</p>
-                </div>
-                <div>
-                  <p className="text-[#4A5568]/70">Organizing Club</p>
-                  <p className="text-[#2d3748]">{selectedEvent.organizingClub}</p>
-                </div>
-              </div>
-
-              <div className="mb-6">
-                <h3 className="text-xl font-semibold text-[#2d3748] mb-2">Description</h3>
-                <p className="text-[#4A5568]/90">{selectedEvent.description}</p>
-              </div>
-
-              {selectedEvent.rules && selectedEvent.rules.length > 0 && (
-                <div className="mb-6">
-                  <h3 className="text-xl font-semibold text-[#2d3748] mb-2">Rules</h3>
-                  <ul className="list-disc list-inside text-[#4A5568]/90 space-y-1">
-                    {selectedEvent.rules.map((rule, index) => (
-                      <li key={index}>{rule}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {selectedEvent.contact && (
-                <div className="mb-6">
-                  <h3 className="text-xl font-semibold text-[#2d3748] mb-2">Contact</h3>
-                  <p className="text-[#2d3748]">{selectedEvent.contact.name}</p>
-                  <p className="text-[#4A5568]/80">{selectedEvent.contact.phone}</p>
-                </div>
-              )}
-
-              <button
-                onClick={() => setSelectedEvent(null)}
-                className="w-full bg-[#d7dde6] text-[#2d3748] py-3 rounded-lg font-semibold shadow-neu-flat hover:bg-[#cfd6df] transition"
-              >
-                Close
-              </button>
-            </div>
+  return (
+    <div className="group w-full h-[320px] md:h-[360px] perspective-1000 cursor-pointer" onClick={() => setFlipped(!flipped)}>
+      <div className={`relative w-full h-full transition-all duration-700 transform-style-3d ${flipped ? 'rotate-y-180' : ''}`}>
+        <div className="absolute w-full h-full backface-hidden bg-[#0a0a0a] border border-[#d4af37]/30 group-hover:border-[#d4af37] transition-colors overflow-hidden rounded-sm shadow-lg">
+          <div className="absolute inset-0">
+             <img src={event.image} alt={event.title} className="w-full h-full object-cover opacity-60 grayscale-[30%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" />
+             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90"></div>
           </div>
+          <div className="absolute bottom-0 left-0 p-5 w-full">
+            <span className="inline-block px-1.5 py-0.5 mb-2 text-[10px] font-mono text-[#d4af37] border border-[#d4af37] bg-black/80">
+                {event.category.toUpperCase()}
+            </span>
+            <h3 className="text-xl md:text-2xl font-cinzel font-bold text-white mb-1 group-hover:text-red-500 transition-colors drop-shadow-lg">{event.title}</h3>
+            <p className="text-gray-300 text-xs flex items-center gap-1.5 font-mono"><Clock size={12} className="text-red-500" /> {event.time}</p>
+          </div>
+          <div className="writing-vertical-rl text-3xl font-noto font-bold text-white/10 absolute right-3 bottom-12 pointer-events-none">{event.japaneseTitle}</div>
         </div>
-      )}
-    </>
-  )
-}
+
+        <div className="absolute w-full h-full backface-hidden rotate-y-180 bg-[#050505] border border-red-900 rounded-sm p-5 flex flex-col relative overflow-hidden">
+            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_#4a0000_0%,_#000000_100%)]"></div>
+            <div className="z-10 flex flex-col h-full">
+                <div className="flex justify-between items-start mb-4 border-b border-red-900/30 pb-3">
+                    <div>
+                        <h3 className="text-lg font-cinzel font-bold text-[#d4af37]">{event.title}</h3>
+                        <p className="text-red-500 font-noto text-xs">{event.japaneseTitle}</p>
+                    </div>
+                    <Zap className="text-red-500 w-4 h-4" />
+                </div>
+                <div className="space-y-3 flex-grow font-mono text-xs text-gray-300 overflow-y-auto">
+                    <p className="leading-relaxed text-gray-400 italic">"{event.description}"</p>
+                    <div className="space-y-2 pt-2 border-t border-white/5">
+                        <div className="flex items-center gap-2"><Calendar className="text-red-600 w-3 h-3" /><span>{event.day}</span></div>
+                        <div className="flex items-center gap-2"><Clock className="text-red-600 w-3 h-3" /><span>{event.time}</span></div>
+                        <div className="flex items-center gap-2"><MapPin className="text-red-600 w-3 h-3" /><span>{event.venue}</span></div>
+                    </div>
+                </div>
+                <button className="w-full mt-3 py-2 bg-red-900/10 hover:bg-red-900/30 border border-red-900/50 text-red-500 hover:text-white font-cinzel font-bold text-[10px] tracking-widest transition-all uppercase">Register</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const App = () => {
+  const [activeDay, setActiveDay] = useState(DAYS[0] || "Day 1");
+  const [activeCategory, setActiveCategory] = useState(CATEGORIES[0]?.id || "Technical");
+
+  const filteredEvents = EVENTS_DATA.filter(event => event.day === activeDay && event.category === activeCategory);
+
+  return (
+    <div className="min-h-screen bg-[#020202] overflow-x-hidden font-sans text-gray-100 selection:bg-red-900 pb-20">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Shojumaru&family=Noto+Sans+JP:wght@300;700&family=JetBrains+Mono:wght@400;700&display=swap');
+        .font-cinzel { font-family: 'Shojumaru', cursive; }
+        .font-noto { font-family: 'Noto Sans JP', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .writing-vertical-rl { writing-mode: vertical-rl; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #500000; border-radius: 2px; }
+      `}</style>
+
+      {/* Red Ambient Background */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_#2a0000_0%,_#020202_80%)]"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[40vw] text-red-900 opacity-[0.05] font-noto font-bold select-none">祭</div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(220,20,60,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(220,20,60,0.06)_1px,transparent_1px)] bg-[size:30px_30px]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_40%,#000000_100%)]"></div>
+      </div>
+
+      <div className="relative z-10 max-w-[1400px] mx-auto px-4 md:px-6 flex flex-col items-center">
+        <GlitchHeader />
+
+        <div className="w-full flex justify-center gap-4 mb-12 z-40">
+             <ScrollSelector title="Timeline" options={DAYS} selected={activeDay} onSelect={setActiveDay} />
+             <ScrollSelector title="Protocol" options={CATEGORIES} selected={activeCategory} onSelect={setActiveCategory} type="icon" />
+        </div>
+
+        <div className="w-full max-w-6xl min-h-[50vh]">
+             {filteredEvents.length > 0 ? (
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredEvents.map(event => <EventCard key={event.id} event={event} />)}
+               </div>
+             ) : (
+                <div className="text-center py-20 border border-red-900/30 bg-black/60 rounded-sm mt-8 backdrop-blur-sm">
+                    <X className="w-8 h-8 text-red-900/50 mx-auto mb-3" />
+                    <h3 className="text-lg font-cinzel text-gray-400">Archives Empty</h3>
+                </div>
+             )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
