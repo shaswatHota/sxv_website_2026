@@ -166,12 +166,15 @@ export default function LoginPage() {
       borderRadius: "2px",
       backdropFilter: "blur(4px)",
       "& fieldset": {
-        borderColor: isError === false ? "#991b1b" : isError === true ? "#059669" : "#44403c",
+        borderColor: isError === false ? "#991b1b" : isError === true ? "#1b998b" : "#44403c",
         borderWidth: "1px",
+        boxShadow: isError === false ?" 0px 0px 10px rgba(220,38,38,0.3)":isError === true ?"0px 0px 8px #3f7f6b":"",
         transition: "all 0.3s ease",
       },
       "&:hover fieldset": {
         borderColor: "#b91c1c",
+        boxShadow:"none",
+        transition: "all 0.3s ease"
       },
       "&.Mui-focused fieldset": {
         borderColor: "#dc2626",
@@ -179,7 +182,7 @@ export default function LoginPage() {
       },
     },
     "& .MuiInputLabel-root": { color: "#a8a29e", fontFamily: "var(--font-noto)" },
-    "& .MuiOutlinedInput-root.Mui-focused .MuiInputLabel-root": { color: "#dc2626" },
+    "& .MuiOutlinedInput-root.Mui-focused .MuiInputLabel-root": { color: "#a8a29e", fontFamily: "var(--font-noto)" },
     "& .MuiOutlinedInput-input": { color: "#f5f5f4" },
   });
 
