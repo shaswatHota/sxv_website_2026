@@ -1,0 +1,448 @@
+{
+  "eventMeta": {
+    "name": "Annual Techno-Cultural Fest",
+    "days": ["Day 1", "Day 2", "Day 3"],
+    "categories": ["Technical", "Cultural", "Fun"]
+  },
+
+  "events": [
+    {
+      "id": "EVT101",
+      "title": "Hackathon 24x7",
+      "category": "Technical",
+      "day": "Day 1",
+      "program": "Coding",
+      "time": "10:00 AM - 10:00 AM (Next Day)",
+      "venue": "Main Lab",
+      "organizingClub": "Coding Club",
+      "shortDescription": "A 24-hour competitive coding hackathon.",
+      "description": "Participants will build innovative solutions to real-world problems within 24 hours. Teams of up to 4 members are allowed.",
+      "rules": [
+        "Team size: 1–4 members",
+        "No plagiarism",
+        "All code must be written during the event"
+      ],
+      "contact": {
+        "name": "Rahul Verma",
+        "phone": "9876543210"
+      }
+    },
+
+    {
+      "id": "EVT102",
+      "title": "Robo Race",
+      "category": "Technical",
+      "day": "Day 2",
+      "program": "Robotics",
+      "time": "11:00 AM - 1:00 PM",
+      "venue": "Mechanical Block",
+      "organizingClub": "Robotics Club",
+      "shortDescription": "Race your robot through an obstacle track.",
+      "description": "Teams will compete to complete a challenging obstacle course in the shortest time possible.",
+      "rules": [
+        "Robot dimensions must be within limits",
+        "No wireless control",
+        "One timeout allowed"
+      ],
+      "contact": {
+        "name": "Ankit Sharma",
+        "phone": "9123456789"
+      }
+    },
+
+    {
+      "id": "EVT201",
+      "title": "Battle of Bands",
+      "category": "Cultural",
+      "day": "Day 1",
+      "program": "Music",
+      "time": "5:00 PM - 7:00 PM",
+      "venue": "Open Auditorium",
+      "organizingClub": "Music Society",
+      "shortDescription": "Bands compete for the ultimate musical crown.",
+      "description": "College bands will perform live. Judging will be based on creativity, rhythm, and audience engagement.",
+      "rules": [
+        "Max 6 members per band",
+        "Performance time: 15 minutes",
+        "Original compositions preferred"
+      ],
+      "contact": {
+        "name": "Sneha Kapoor",
+        "phone": "9988776655"
+      }
+    },
+
+    {
+      "id": "EVT202",
+      "title": "Street Dance Showdown",
+      "category": "Cultural",
+      "day": "Day 2",
+      "program": "Dance",
+      "time": "3:00 PM - 5:00 PM",
+      "venue": "Basketball Court",
+      "organizingClub": "Dance Crew",
+      "shortDescription": "High-energy street dance competition.",
+      "description": "Solo and group performances are allowed. Styles include hip-hop, popping, and freestyle.",
+      "rules": [
+        "Time limit: 4–6 minutes",
+        "Props allowed",
+        "Explicit content not allowed"
+      ],
+      "contact": {
+        "name": "Riya Mehta",
+        "phone": "9012345678"
+      }
+    },
+
+    {
+      "id": "EVT301",
+      "title": "Treasure Hunt",
+      "category": "Fun",
+      "day": "Day 1",
+      "program": "Games",
+      "time": "1:00 PM - 3:00 PM",
+      "venue": "Entire Campus",
+      "organizingClub": "Fun Committee",
+      "shortDescription": "Solve clues and hunt for the treasure.",
+      "description": "Teams will follow a series of clues spread across the campus. The fastest team wins.",
+      "rules": [
+        "Team size: 2–5",
+        "No damaging property",
+        "Decision of organizers is final"
+      ],
+      "contact": {
+        "name": "Kunal Singh",
+        "phone": "9345678123"
+      }
+    },
+
+    {
+      "id": "EVT302",
+      "title": "Open Mic Night",
+      "category": "Fun",
+      "day": "Day 3",
+      "program": "Entertainment",
+      "time": "6:00 PM - 8:00 PM",
+      "venue": "Cafe Lawn",
+      "organizingClub": "Literary Club",
+      "shortDescription": "Showcase your talent on stage.",
+      "description": "Participants can perform poetry, comedy, storytelling, or music.",
+      "rules": [
+        "Time limit: 5 minutes per participant",
+        "No offensive content",
+        "On-spot registration allowed"
+      ],
+      "contact": {
+        "name": "Aman Joshi",
+        "phone": "9090909090"
+      }
+    },
+    {
+    "id": "EVT103",
+    "title": "Code Debugging Contest",
+    "category": "Technical",
+    "day": "Day 3",
+    "program": "Coding",
+    "time": "10:00 AM - 12:00 PM",
+    "venue": "Computer Lab 2",
+    "organizingClub": "Coding Club",
+    "shortDescription": "Find and fix bugs faster than others.",
+    "description": "Participants will be given buggy programs and must debug them within the given time.",
+    "rules": [
+        "Individual participation only",
+        "No internet access",
+        "Decision of judges is final"
+    ],
+    "contact": {
+        "name": "Arjun Patel",
+        "phone": "9871234567"
+    }
+    },
+    {
+    "id": "EVT203",
+    "title": "Solo Singing",
+    "category": "Cultural",
+    "day": "Day 3",
+    "program": "Music",
+    "time": "11:00 AM - 1:00 PM",
+    "venue": "Mini Auditorium",
+    "organizingClub": "Music Society",
+    "shortDescription": "Showcase your singing talent.",
+    "description": "Participants perform a solo song of their choice in front of judges.",
+    "rules": [
+        "Time limit: 4 minutes",
+        "Karaoke allowed",
+        "No offensive lyrics"
+    ],
+    "contact": {
+        "name": "Pooja Nair",
+        "phone": "9098765432"
+    }
+    },
+    {
+    "id": "EVT204",
+    "title": "Fashion Show",
+    "category": "Cultural",
+    "day": "Day 2",
+    "program": "Fashion",
+    "time": "6:00 PM - 8:00 PM",
+    "venue": "Main Stage",
+    "organizingClub": "Cultural Committee",
+    "shortDescription": "Walk the ramp with style and confidence.",
+    "description": "Teams present fashion rounds based on creativity, theme, and presentation.",
+    "rules": [
+        "Team size: 6–10",
+        "Vulgarity not allowed",
+        "Theme must be approved beforehand"
+    ],
+    "contact": {
+        "name": "Rohit Malhotra",
+        "phone": "9887766554"
+    }
+    },
+    {
+    "id": "EVT303",
+    "title": "LAN Gaming Tournament",
+    "category": "Fun",
+    "day": "Day 2",
+    "program": "Gaming",
+    "time": "10:00 AM - 4:00 PM",
+    "venue": "IT Block",
+    "organizingClub": "Gaming Club",
+    "shortDescription": "Compete in popular LAN games.",
+    "description": "Multiplayer gaming tournament featuring games like CS and Valorant.",
+    "rules": [
+        "Teams of 5",
+        "No cheating or hacking",
+        "Bring your own peripherals"
+    ],
+    "contact": {
+        "name": "Sahil Kumar",
+        "phone": "9365478120"
+    }
+    },
+    {
+    "id": "EVT304",
+    "title": "Fun Quiz & Riddles",
+    "category": "Fun",
+    "day": "Day 3",
+    "program": "Quiz",
+    "time": "1:00 PM - 2:00 PM",
+    "venue": "Cafeteria",
+    "organizingClub": "Fun Committee",
+    "shortDescription": "Light-hearted quiz full of riddles.",
+    "description": "A fun quiz with riddles, puzzles, and brain teasers for everyone.",
+    "rules": [
+        "Team size: 2–3",
+        "No mobile phones",
+        "Have fun!"
+    ],
+    "contact": {
+        "name": "Mehul Jain",
+        "phone": "9001122334"
+    }
+    },
+    {
+    "id": "EVT105",
+    "title": "Paper Presentation",
+    "category": "Technical",
+    "day": "Day 1",
+    "program": "Research",
+    "time": "11:00 AM - 1:00 PM",
+    "venue": "Seminar Hall A",
+    "organizingClub": "Research Cell",
+    "shortDescription": "Present your innovative research ideas.",
+    "description": "Participants will present technical papers on emerging technologies before a panel of judges.",
+    "rules": [
+      "Team size: 1–2",
+      "Presentation time: 8 minutes",
+      "PPT submission mandatory"
+    ],
+    "contact": {
+      "name": "Siddharth Rao",
+      "phone": "9898989898"
+    }
+  },
+
+  {
+    "id": "EVT106",
+    "title": "Photography Contest",
+    "category": "Fun",
+    "day": "Day 1",
+    "program": "Photography",
+    "time": "12:00 PM - 4:00 PM",
+    "venue": "Entire Campus",
+    "organizingClub": "Media Club",
+    "shortDescription": "Capture moments around the campus.",
+    "description": "Participants must capture photos based on given themes during the fest.",
+    "rules": [
+      "Only mobile or DSLR cameras allowed",
+      "No editing allowed",
+      "Theme will be announced on spot"
+    ],
+    "contact": {
+      "name": "Aditya Kulkarni",
+      "phone": "9123987654"
+    }
+  },
+
+  {
+    "id": "EVT107",
+    "title": "Stand-Up Comedy",
+    "category": "Cultural",
+    "day": "Day 1",
+    "program": "Comedy",
+    "time": "4:00 PM - 5:30 PM",
+    "venue": "Mini Auditorium",
+    "organizingClub": "Literary Club",
+    "shortDescription": "Make the audience laugh out loud.",
+    "description": "Participants perform a stand-up comedy act in front of a live audience.",
+    "rules": [
+      "Time limit: 5 minutes",
+      "No offensive language",
+      "Original content preferred"
+    ],
+    "contact": {
+      "name": "Nikita Shah",
+      "phone": "9345612789"
+    }
+  },
+
+  {
+    "id": "EVT205",
+    "title": "Poster Making Competition",
+    "category": "Cultural",
+    "day": "Day 2",
+    "program": "Art",
+    "time": "10:00 AM - 12:00 PM",
+    "venue": "Drawing Hall",
+    "organizingClub": "Fine Arts Club",
+    "shortDescription": "Express ideas through creative posters.",
+    "description": "Participants design posters based on social and technical themes.",
+    "rules": [
+      "Individual participation",
+      "Materials will be provided",
+      "Theme announced on spot"
+    ],
+    "contact": {
+      "name": "Kavya Iyer",
+      "phone": "9876501234"
+    }
+  },
+
+  {
+    "id": "EVT305",
+    "title": "Minute to Win It",
+    "category": "Fun",
+    "day": "Day 2",
+    "program": "Games",
+    "time": "2:00 PM - 4:00 PM",
+    "venue": "Activity Zone",
+    "organizingClub": "Fun Committee",
+    "shortDescription": "Complete fun challenges within a minute.",
+    "description": "Participants compete in a series of short, exciting physical and mental challenges.",
+    "rules": [
+      "Individual participation",
+      "Time limit strictly enforced",
+      "No second attempts"
+    ],
+    "contact": {
+      "name": "Varun Mehra",
+      "phone": "9988123456"
+    }
+  },
+
+  {
+    "id": "EVT108",
+    "title": "Electro Quiz",
+    "category": "Technical",
+    "day": "Day 2",
+    "program": "Quiz",
+    "time": "4:30 PM - 6:00 PM",
+    "venue": "Lecture Hall 3",
+    "organizingClub": "Electronics Club",
+    "shortDescription": "Test your electronics fundamentals.",
+    "description": "Quiz covering analog, digital electronics, and recent tech trends.",
+    "rules": [
+      "Team size: 2",
+      "No calculators allowed",
+      "Multiple rounds"
+    ],
+    "contact": {
+      "name": "Ramesh Pillai",
+      "phone": "9011223344"
+    }
+  },
+
+  {
+    "id": "EVT306",
+    "title": "Box Cricket",
+    "category": "Fun",
+    "day": "Day 3",
+    "program": "Sports",
+    "time": "9:00 AM - 1:00 PM",
+    "venue": "Parking Ground",
+    "organizingClub": "Sports Committee",
+    "shortDescription": "Fast-paced cricket in a compact format.",
+    "description": "Teams compete in short box-cricket matches with simplified rules.",
+    "rules": [
+      "Team size: 6",
+      "Tennis ball only",
+      "Umpire decision final"
+    ],
+    "contact": {
+      "name": "Harsh Vardhan",
+      "phone": "9765432109"
+    }
+  },
+
+  {
+    "id": "EVT206",
+    "title": "Drama Skit Competition",
+    "category": "Cultural",
+    "day": "Day 3",
+    "program": "Drama",
+    "time": "2:00 PM - 4:00 PM",
+    "venue": "Open Auditorium",
+    "organizingClub": "Drama Club",
+    "shortDescription": "Perform powerful short skits.",
+    "description": "Teams perform skits conveying social or entertaining messages.",
+    "rules": [
+      "Team size: 5–10",
+      "Time limit: 12 minutes",
+      "Props allowed"
+    ],
+    "contact": {
+      "name": "Ananya Bose",
+      "phone": "9888012345"
+    }
+  },
+
+  {
+    "id": "EVT109",
+    "title": "AI & ML Workshop",
+    "category": "Technical",
+    "day": "Day 3",
+    "program": "Workshop",
+    "time": "4:30 PM - 6:30 PM",
+    "venue": "Smart Classroom",
+    "organizingClub": "AI Club",
+    "shortDescription": "Hands-on introduction to AI and ML.",
+    "description": "A beginner-friendly workshop covering basics of AI, ML, and real-world use cases.",
+    "rules": [
+      "Laptop mandatory",
+      "Limited seats",
+      "Prior registration required"
+    ],
+    "contact": {
+      "name": "Prateek Mishra",
+      "phone": "9098761234"
+    }
+  }
+
+
+
+
+
+  ]
+}

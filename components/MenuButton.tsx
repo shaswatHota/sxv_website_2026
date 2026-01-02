@@ -1,18 +1,23 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
 
 type hamburgerProps = {
   height?: number
   width?: number
+  isMenuOpen:boolean
 }
 
 export default function HamburgerButton({
   height = 80,
   width = 80,
+  isMenuOpen
 }: hamburgerProps) {
   const [active, setActive] = useState<boolean>(false)
+  useEffect(() =>{
+    setActive(isMenuOpen)
+  },[isMenuOpen])
   return (
     <motion.button
       style={{ height: `${height}px`, width: `${width}px` }}
