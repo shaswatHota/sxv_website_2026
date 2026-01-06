@@ -1,3 +1,7 @@
+import { Agriculture, Launch } from "@mui/icons-material";
+import { Satellite, Dam } from "lucide-react";
+import image from "next/image";
+
 export interface Club {
   id: string;
   name: string;
@@ -11,119 +15,162 @@ export interface Club {
 export const clubs: Club[] = [
   {
     id: "1",
-    name: "ART AND PHOTOGRAPHY CLUB",
+    name: "PIXELS- The Official Art and Photography Club",
     jpName: "芸術写真",
-    description: "Capturing the soul through lenses and brushes.",
-    image:"/placeholder-1.png",
+    description:
+      "PIXELS is the official Art & Photography Club of VSSUT, Burla, dedicated to capturing creativity through lenses and strokes. The club serves as a vibrant platform for students to explore photography, cinematography, digital art, sketching, and visual storytelling. Through workshops, photowalks, exhibitions, competitions, and event coverage, PIXELS nurtures artistic expression and technical skills. United by a passion for visuals, the club documents campus life, celebrates moments, and transforms ideas into compelling art, making creativity a shared experience at VSSUT.",
+    image: "/clubs/PIXELS.jpeg",
     hanko: "美",
-    overlayChar: "写"
+    overlayChar: "写",
   },
   {
     id: "2",
-    name: "LITERARY SOCIETY",
-    jpName: "文学協会",
-    description: "Guardians of the written word and oral tradition.",
-    image: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=800&q=80",
-    hanko: "書",
-    overlayChar: "文"
+    name: "IEEE Society ",
+    jpName: "電気工学",
+    description:
+      "The IEEE VSSUT Student Branch is a vibrant community of enthusiastic engineers, innovators, and leaders driven by technology and a shared passion for advancing humanity. Affiliated with the Institute of Electrical and Electronics Engineers (IEEE), the world’s largest technical professional organization, our branch at Veer Surendra Sai University of Technology (VSSUT), Burla fosters learning, collaboration, and innovation across diverse engineering domains. Through workshops, seminars, hackathons, and outreach programs, we empower students to develop technical expertise while nurturing teamwork and leadership qualities. With a strong focus on research, innovation, and professional growth, the IEEE VSSUT Student Branch serves as a platform where young minds can transform ideas into impactful solutions for society.",
+    image: "/clubs/IEEE.jpeg",
+    hanko: "流",
+    overlayChar: "電",
   },
   {
     id: "3",
-    name: "ENIGMA",
-    jpName: "謎の組織",
-    description: "Solving the complex puzzles of the digital age.",
-    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80",
-    hanko: "暗",
-    overlayChar: "謎"
+    name: "EDP Society ",
+    jpName: "起業道",
+    description:
+      "The Entrepreneurship Cell (E-Cell) is a nonprofit organization and techno-management club run by students of VSSUT, Odisha. We create awareness among the students about entrepreneurship through our various programs like workshops, speaker sessions, and other such events. We support the upcoming entrepreneurs by providing them necessary resources such as mentors, consultancy, seed funds, and networking.",
+    image:
+      "/clubs/Ecell.jpeg",
+    hanko: "金",
+    overlayChar: "商",
   },
   {
     id: "4",
-    name: "IEEE",
-    jpName: "電気工学",
-    description: "Advancing technology for humanity and the future.",
-    image: "/placeholder-1.png",
-    hanko: "流",
-    overlayChar: "電"
+    name: "VSSUT ROBOTICS",
+    jpName: "機械工学",
+    description:
+      "VSSUT Robotics is an interdisciplinary society dedicated to pushing the boundaries of automation, AI-driven systems, and embedded technology. As our motto says, VSSUT Robotics is exactly the place where imagination meets innovation. We focus on integrating robotics with environmental science, electrical engineering, and industrial applications. Our projects emphasize autonomous navigation, sustainable solutions, and real-world impact, making robotics more accessible and efficient. Whether designing intelligent watercraft, home automation systems, or real-time monitoring solutions, we aim to innovate, optimize, and implement advanced robotic technologies.",
+    image: "/clubs/robotics.jpeg",
+    hanko: "鉄",
+    overlayChar: "機",
   },
   {
     id: "5",
-    name: "ROBOTICS",
-    jpName: "機械工学",
-    description: "Forging the steel legions of tomorrow.",
-    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80",
-    hanko: "鉄",
-    overlayChar: "機"
+    name: "Quizzine (Cultural)",
+    jpName: "知識門",
+    description:
+    "Quizzine is the official quiz club known for organizing diverse and high-impact quiz events across technical, business, sports, and general knowledge domains. It has successfully conducted multiple inter-college and intra-college competitions such as Quiz Gateway for Freshers, War of the Houses, Biz Tech, and Deal with the Devil. Quizzine members have also represented the club at prestigious external quizzes, securing podium finishes at events like NTPC Electron Quiz and Mindspark at NIT Rourkela.The club actively collaborates with other institutions through events like QROSSOVER, fostering competitive quizzing culture.Through consistent participation and organization, Quizzine has built a strong reputation for promoting analytical thinking and knowledge-driven competition.",
+    image:
+    "/clubs/Quizzine.jpeg",
+    hanko: "知",
+    overlayChar: "問",
   },
   {
     id: "6",
-    name: "SOULS",
-    jpName: "魂の舞",
-    description: "Expressing the inner spirit through rhythm.",
-    image: "https://images.unsplash.com/photo-1535525153412-5a42439a210d?auto=format&fit=crop&w=800&q=80",
-    hanko: "魂",
-    overlayChar: "舞"
+    name: "Team AeroTech",
+    jpName: "航空技術",
+    description:
+    "AeroTech Club is a student-led technical club dedicated to aviation and flight technologies. The club focuses on the design, fabrication, and testing of aircraft and drones, along with flight simulations and hands-on technical activities.",
+    image: "/clubs/AeroTech.jpeg",
+    hanko: "天",
+    overlayChar: "空",
   },
   {
     id: "7",
-    name: "AEROTECH",
-    jpName: "航空技術",
-    description: "Taking flight into the boundless blue.",
-    image: "https://images.unsplash.com/photo-1473968512647-3e447244af8f?auto=format&fit=crop&w=800&q=80",
-    hanko: "天",
-    overlayChar: "空"
+    name: "Team of Sustainability",
+    jpName: "起業道",
+    description:
+      "Aligned with the UN’s 17 Sustainable Development Goals, our mission is to drive sustainable impact through innovation. We empower sustainability by undertaking purpose-driven projects, research, awareness campaigns, and collaborative action.",
+    image: "/clubs/TOS.jpeg",
+    hanko: "金",
+    overlayChar: "商",
   },
   {
     id: "8",
-    name: "VEERRACERS",
-    jpName: "速の侍",
-    description: "Engineered for speed, driven by precision.",
-    image: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=800&q=80",
-    hanko: "速",
-    overlayChar: "走"
+    name: "VIBRANZ ",
+    jpName: "知識門",
+    description:
+      "VIBRANZ – The Dance Club of VSSUT.Vibranz is the official dance club of VSSUT, a dynamic platform where passion meets rhythm.The club brings together dancers of all styles to learn, create, and perform, promoting creativity, teamwork, and self-expression. From workshops and regular practice sessions to stage performances and competitions, Vibranz represents energy, dedication, and the vibrant dance culture of VSSUT.",
+    image: "/clubs/Vibranz.jpeg",
+    hanko: "知",
+    overlayChar: "問",
   },
   {
     id: "9",
-    name: "QUIZ",
-    jpName: "知識門",
-    description: "The ultimate battle of intellect and wit.",
-    image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80",
-    hanko: "知",
-    overlayChar: "問"
+    name: "SOULS-The Official Music Club ",
+    jpName: "魂の舞",
+    description:
+      "SOULS - The Official Music Club Of VSSUT Burla, is more than just a campus organization, it is a close-knit family bound by a shared love for music. Through structured inductions, inspiring orientations, and performances at major academic, cultural, public, and national events, the club blends creativity, discipline, and teamwork. From welcoming new voices through warm inductions to lighting up auditoriums, conferences, and city streets with heartfelt performances, the club creates spaces where creativity, confidence, and connection grow together. Whether on campus or on external platforms, SOULS carries the spirit of VSSUT through melody, emotion, and collective passion, making music a lived and shared experience for everyone involved.",
+    image: "/clubs/souls.jpeg",
+    hanko: "魂",
+    overlayChar: "舞",
   },
   {
     id: "10",
-    name: "VEERRACING",
-    jpName: "競争心",
-    description: "Pushing the limits of mechanical endurance.",
-    image: "/placeholder-1.png",
-    hanko: "競",
-    overlayChar: "輪"
+    name: "VVeerRacerss Electric",
+    jpName: "速の侍",
+    description:
+      "VeerRacerss Electric is the official Formula Student team of VSSUT, Burla. Affiliated with SAE India, the team comprises undergraduate students who design, build and compete with electric formula-style race cars in national events like Formula Imperial, Supra SAE, Formula Bharat and FFS India.",
+    image: "/clubs/VRE.jpeg",
+    hanko: "速",
+    overlayChar: "走",
   },
   {
     id: "11",
-    name: "EMOTICA",
-    jpName: "感情劇",
-    description: "Mastering the art of dramatic expression.",
-    image: "",
-    hanko: "劇",
-    overlayChar: "演"
+    name: "The Literary Society",
+    jpName: "文学協会",
+    description:
+      "The Literary Society promotes methodical and creative thinking among students that is presented through poems, essays, stories, monologues and reports by the members.",
+    image: "/clubs/TLS.jpeg",
+    hanko: "書",
+    overlayChar: "文",
   },
   {
     id: "12",
-    name: "IDEA & INNOVATION",
-    jpName: "創意工夫",
-    description: "Where imagination meets reality.",
-    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80",
-    hanko: "創",
-    overlayChar: "想"
+    name: "ENIGMA",
+    jpName: "謎の組織",
+    description:
+      "Enigma, the official web and coding club of VSSUT Burla, is a dynamic community of programmers, designers, and technology enthusiasts committed to nurturing innovation and problem solving skills. The club offers students practical exposure to diverse fields such as web and app development, game design, competitive programming, artificial intelligence, machine learning, cybersecurity, cloud computing and outreach domains.",
+    image: "/clubs/enigma.jpeg",
+    hanko: "暗",
+    overlayChar: "謎",
   },
   {
     id: "13",
-    name: "EDP",
-    jpName: "起業道",
-    description: "Building the empires of the next generation.",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80",
-    hanko: "金",
-    overlayChar: "商"
+    name: "AVC- The Audio Visual Club",
+    jpName: "謎の組織",
+    description:
+      "The Audio Visual Club is the creative hub of our college, capturing events and telling stories through videos, teasers, aftermovies, and short films. With dedicated teams for cinematography, videography, design, acting, editing, and content writing, we showcase campus life, collaborate with other clubs, host competitions, and produce our signature \"Guptgu\" series for freshers.",
+    image: "/clubs/AVC.jpeg",
+    hanko: "暗",
+    overlayChar: "謎",
+  },
+  {
+    id: "14",
+    name: "Idea innovation cell",
+    jpName: "創意工夫",
+    description: "Veer Surendra Sai University of Technology located near the iconic Hirakud Dam, has a rich history in technical education. Established as the University College of Engineering (UCE), it started with just two departments--Electrical and Mechanical and has since evolved into a leading Institution in Odisha and eastern India.. The Idea Innovation Cell (IIC) at the university is a vibrant community of tech enthusiasts and innovators. It focuses on developing products with socio-economic value and addressing challenges across diverse sectors such as Aerospace, Agriculture, Cybersecurity, and Healthcare. The IIC strives to offer indigenous, efficient and cost-effective solutions that benefit society and the world at large. Notably the IIC’s flagship project, the VSSUT Satellite Launch Vehicle (VSLV), stands out as India’s first student-built indigenous sounding rocket. The VSLV’s primary objective is to monitor slit deposit levels in the Hirakud Dam, demonstrating the university’s commitment to innovation and societal impact.",
+    image:
+      "/clubs/iic.jpeg",
+    hanko: "創",
+    overlayChar: "想",
+  },
+  {
+    id: "15",
+    name: "EMOTICA",
+    jpName: "感情劇",
+    description: "Mastering the art of dramatic expression.",
+    image: "/clubs/Emotica.jpeg",
+    hanko: "劇",
+    overlayChar: "演",
+  },
+  {
+    id: "16",
+    name: "VEERRACING",
+    jpName: "競争心",
+    description: "Pushing the limits of mechanical endurance.",
+    image: "/clubs/VeeRacing.jpeg",
+    hanko: "競",
+    overlayChar: "輪",
   },
 ];
