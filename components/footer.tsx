@@ -43,13 +43,12 @@ export default function Footer({ className = "" }: FooterProps) {
               未来
             </div>
             
+            {/* Replace text with neon logo image */}
             <div className="glitch-wrapper inline-block w-fit">
-              <h2 
-                className="text-2xl  lg:text-3xl font-black text-white font-['Orbitron'] tracking-tighter glitch-text" 
-                data-text="SAMAVESHxVASSAUNT"
-              >
-                SAMAVESH<span className="text-[var(--shrine-red)]">x</span>VASSAUNT
-              </h2>
+              <img 
+                src="/samavesh-vassaunt-neon-logo.PNG"  
+                className="max-w-full h-auto max-h-41 object-contain"
+              />
             </div>
             
             <p className="text-gray-500 leading-relaxed font-['Shojumaru'] text-lg max-w-sm border-l-2 border-[var(--blood-red)] pl-4">
@@ -138,38 +137,40 @@ export default function Footer({ className = "" }: FooterProps) {
               <i className="fa-solid fa-satellite-dish"></i> Uplink
             </h3>
             
-            {/* Social Hexagons */}
+            {/* Social Icons - Updated with specific links */}
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 bg-black border border-gray-800 flex items-center justify-center text-gray-500 hover:border-[var(--shrine-red)] hover:text-[var(--shrine-red)] hover:shadow-[0_0_15px_rgba(166,24,24,0.5)] transition-all cyber-clip-tl">
-                <i className="fa-brands fa-discord"></i>
+              {/* 1st Instagram - Samavesh */}
+              <a 
+                href="https://www.instagram.com/samavesh.vssut/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-black border border-gray-800 flex items-center justify-center text-gray-500 hover:border-[var(--shrine-red)] hover:text-[var(--shrine-red)] hover:shadow-[0_0_15px_rgba(166,24,24,0.5)] transition-all cyber-clip-tl"
+                title="Samavesh Instagram"
+              >
+                <i className="fa-brands fa-instagram"></i>
               </a>
-              <a href="#" className="w-10 h-10 bg-black border border-gray-800 flex items-center justify-center text-gray-500 hover:border-[var(--paper-white)] hover:text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all cyber-clip-tl">
-                <i className="fa-brands fa-twitter"></i>
+              
+              {/* 2nd Email */}
+              <a 
+                href="mailto:techsociety@vssut.ac.in" 
+                className="w-10 h-10 bg-black border border-gray-800 flex items-center justify-center text-gray-500 hover:border-[var(--paper-white)] hover:text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all cyber-clip-tl"
+                title="Email: techsociety@vssut.ac.in"
+              >
+                <i className="fa-solid fa-envelope"></i>
               </a>
-              <a href="#" className="w-10 h-10 bg-black border border-gray-800 flex items-center justify-center text-gray-500 hover:border-[var(--rust-brown)] hover:text-[var(--rust-brown)] hover:shadow-[0_0_15px_rgba(140,106,93,0.5)] transition-all cyber-clip-tl">
+              
+              {/* 3rd Instagram - Vassaunt */}
+              <a 
+                href="https://www.instagram.com/vassaunt_vssut?igsh=MTh4bnhkM21xdm5sag==" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-black border border-gray-800 flex items-center justify-center text-gray-500 hover:border-[var(--rust-brown)] hover:text-[var(--rust-brown)] hover:shadow-[0_0_15px_rgba(140,106,93,0.5)] transition-all cyber-clip-tl"
+                title="Vassaunt Instagram"
+              >
                 <i className="fa-brands fa-instagram"></i>
               </a>
             </div>
-            
-            {/* Newsletter Input */}
-            <form onSubmit={handleEmailSubmit} className="relative mt-2">
-              <input 
-                type="email" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="ENTER_EMAIL_ID" 
-                className="w-full bg-[var(--cyber-black)] border-b border-gray-800 text-white font-['Shojumaru'] py-2 pl-2 pr-10 focus:outline-none focus:border-[var(--shrine-red)] focus:bg-[#120505] transition-colors placeholder-gray-800 text-sm"
-              />
-              <button 
-                type="submit"
-                className="absolute right-0 top-0 h-full text-gray-600 hover:text-[var(--shrine-red)] transition-colors"
-              >
-                <i className="fa-solid fa-arrow-right"></i>
-              </button>
-            </form>
-            <p className="text-[10px] text-gray-700 font-['Shojumaru'] uppercase">
-              By subscribing, you agree to join the data stream.
-            </p>
+
           </div>
         </div>
 
@@ -190,23 +191,22 @@ export default function Footer({ className = "" }: FooterProps) {
           <div className="flex items-center gap-4">
             <span className="text-[var(--shrine-red)]">© 2025 SAMAVESHxVASSAUNT</span>
             <span className="hidden md:inline text-gray-800">|</span>
-            <span className="hover:text-white cursor-pointer transition-colors">PRIVACY_PROTOCOL</span>
           </div>
           
-          {/* Decorative Barcode-ish lines */}
-          <div className="flex items-end gap-[2px] h-4 opacity-50">
-            <div className="w-[2px] h-full bg-[var(--paper-white)]"></div>
-            <div className="w-[2px] h-1/2 bg-gray-800"></div>
-            <div className="w-[2px] h-3/4 bg-gray-800"></div>
-            <div className="w-[2px] h-full bg-[var(--shrine-red)]"></div>
-            <div className="w-[2px] h-1/4 bg-gray-800"></div>
-            <div className="w-[2px] h-full bg-[var(--rust-brown)]"></div>
+          {/* Replace decorative lines with Enigma logo */}
+          <div className="flex items-center gap-3">
+            <img 
+              src="/enigma-logo.png" 
+              alt="Enigma Logo" 
+              className="w-15 h-20 object-contain opacity-80 hover:opacity-100 transition-opacity"
+            />
           </div>
           
           <div className="flex items-center gap-2">
-            <span>DESIGNED IN</span>
-            <span className="text-white font-['Shojumaru']">日本</span>
-            <i className="fa-solid fa-bolt text-[var(--rust-brown)] animate-pulse"></i>
+            <span className="text-gray-500">MADE WITH</span>
+            <span className="text-red-500">❤</span>
+            <span className="text-gray-500">BY</span>
+            <span className="text-white font-['Shojumaru']">ENIGMA VSSUT</span>
           </div>
         </div>
       </div>

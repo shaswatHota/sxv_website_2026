@@ -72,7 +72,7 @@ export default function Hero() {
   }, [jp]);
 
   const paraText =
-    "An exploration of identity, design, and technology inspired by modern cyber culture and editorial storytelling.";
+    "THE ANNUAL TECHNO-CULTURAL FEST OF VSSUT";
 
   return (
     <div className={`${styles.content} ${!jp ? styles.englishFont : ""} ${fontLoaded ? styles.fontLoaded : styles.fontLoading}`}>
