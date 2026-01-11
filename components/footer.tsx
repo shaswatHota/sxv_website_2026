@@ -19,7 +19,7 @@ export default function Footer({ className = "" }: FooterProps) {
   };
 
   return (
-    <footer className={`relative bg-[var(--cyber-dark)] border-t-2 border-[var(--blood-red)] mt-auto ${className}`}>
+    <footer className={`relative bg-[var(--cyber-dark)] border-t-2 border-[var(--blood-red)] z-0 mt-auto ${className}`}>
       {/* Top Decor Strip */}
       <div className="absolute -top-[14px] left-0 w-full h-4 flex justify-between items-center px-4 md:px-12 pointer-events-none">
         <div className="w-32 h-[2px] bg-[var(--shrine-red)]"></div>
@@ -44,7 +44,7 @@ export default function Footer({ className = "" }: FooterProps) {
             </div>
             
             {/* Replace text with neon logo image */}
-            <div className="glitch-wrapper inline-block w-fit">
+            <div className="glitch-wrapper inline-block w-fit z-0">
               <img 
                 src="/samavesh-vassaunt-neon-logo.PNG"  
                 className="max-w-full h-auto max-h-41 object-contain"
