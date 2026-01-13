@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import styles from "./Hero.module.css";
+import Timer from "./Timer";
 
 export default function Hero() {
   useEffect(() => {
@@ -73,16 +74,21 @@ export default function Hero() {
 
   return (
     <div className={styles.heroOverlay} id="heroText">
-      <div className={styles.titleContainer}>
-        <div className={`${styles.wordWrapper} ${styles.wordLeft}`} id="wordLeft" data-text="SAMAVESH">
-          SAMAVESH
+      <div className={styles.heroContent}>
+        <div className={styles.titleContainer}>
+          <div className={`${styles.wordWrapper} ${styles.wordLeft}`} id="wordLeft" data-text="SAMAVESH">
+            SAMAVESH
+          </div>
+          <div className={styles.separator} id="separator">
+            <div className={`${styles.bar} ${styles.bar1}`}></div>
+            <div className={`${styles.bar} ${styles.bar2}`}></div>
+          </div>
+          <div className={`${styles.wordWrapper} ${styles.wordRight}`} id="wordRight" data-text="VASSAUNT">
+            VASSAUNT
+          </div>
         </div>
-        <div className={styles.separator} id="separator">
-          <div className={`${styles.bar} ${styles.bar1}`}></div>
-          <div className={`${styles.bar} ${styles.bar2}`}></div>
-        </div>
-        <div className={`${styles.wordWrapper} ${styles.wordRight}`} id="wordRight" data-text="VASSAUNT">
-          VASSAUNT
+        <div className={styles.timerContainer}>
+          <Timer />
         </div>
       </div>
     </div>

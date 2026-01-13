@@ -33,6 +33,20 @@
   perspective: 1000px;
 }
 
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.timerContainer {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease-out 4s forwards;
+}
+
 .titleContainer {
   display: flex;
   align-items: center;
@@ -211,6 +225,10 @@
 
 /* Mobile Layout */
 @media (max-width: 768px) {
+  .heroContent {
+    gap: 1.5rem;
+  }
+
   .titleContainer {
     flex-direction: column;
     font-size: clamp(2.5rem, 10vw, 4rem);
@@ -272,4 +290,15 @@
 @keyframes slideDownVertical {
   0% { transform: translateY(-40%); opacity: 0; }
   100% { transform: translateY(20%); opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  0% { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
 }
