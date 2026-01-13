@@ -150,6 +150,8 @@ export default function LoginPage() {
     setEmailErr("");
     setpassworderr("");
 
+    console.log('Attempting login with:', { email, password: '***' });
+
     const res = LoginSchema.safeParse({ email, password });
     if (!res.success) {
       const emailInValid = res.error.issues.find((issue) => issue.path[0] === "email");
@@ -168,7 +170,11 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
+      console.log('Login service called with:', { email, password: '***' });
+      console.log('API base URL:', process.env.NEXT_PUBLIC_API_URL || 'https://sxv-backend-eight.vercel.app');
+      
       const res = await login({ email, password });
+      console.log('Login response received:', { success: res.data.success, hasToken: !!res.data.token });
       
       // Extract user data from response - try different possible fields
       const decoded: any = jwtDecode(res.data.token)
@@ -178,11 +184,36 @@ export default function LoginPage() {
         email: decoded.email,
       }
       
+      console.log('Decoded user data:', userData);
+      
       // Use Auth context login function which handles token storage and redirect
       authLogin(res.data.token, userData);
       
     } catch (err: any) {
-      setError(err.response?.data?.message || "Login failed. Please check your credentials.");
+      console.error('Login error:', err);
+      
+      // Enhanced error handling
+      let errorMessage = "Login failed. Please try again.";
+      
+      if (err.response) {
+        // Server responded with error status
+        console.error('Server error details:', err.response.data);
+        errorMessage = err.response.data?.message || `Server error (${err.response.status})`;
+        
+        if (err.response.status === 500) {
+          errorMessage = "Server error occurred. Please try again or contact support if the issue persists.";
+        }
+      } else if (err.request) {
+        // Network error
+        console.error('Network error:', err.request);
+        errorMessage = "Network error. Please check your connection and try again.";
+      } else {
+        // Other error
+        console.error('Unexpected error:', err.message);
+        errorMessage = err.message || "An unexpected error occurred.";
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

@@ -5,8 +5,6 @@ import { Clock, MapPin, Calendar, ChevronDown, Zap, Theater, Gamepad2, Sparkles,
 import { EventItems } from "@/types/Event";
 import { eventService } from "@/services/eventService";
 import { transformBackendEventToFrontend, getUniqueCategories, getUniqueDays } from "@/utils/eventTransformer";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import api from '@/utils/api';
@@ -48,17 +46,13 @@ const GlitchHeader = () => {
 };
 
 const ScrollSelector = ({
-  title,
   options,
   selected,
   onSelect,
-  type = 'text',
 }: {
-  title: string;
   options: Array<ScrollOption | string>;
   selected: string;
   onSelect: (value: string) => void;
-  type?: 'text' | 'icon';
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -350,27 +344,7 @@ const App = () => {
     window.location.reload();
   };
 
-  if (loading) {
-    return <LoadingSpinner message="Loading Events..." />;
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-[#020202] flex items-center justify-center">
-        <div className="text-center">
-          <X className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <p className="text-red-500 font-cinzel mb-4">{error}</p>
-          <button 
-            onClick={retryFetch} 
-            className="px-4 py-2 bg-red-900/20 border border-red-900 text-red-500 font-cinzel hover:bg-red-900/40 transition-colors"
-          >
-            Retry
-          </button>
-        </div>
-      </div>
-    );
-  }
-
+  // Don't show full page loading - always show the layout
   return (
     <div className="min-h-screen bg-[#020202] overflow-x-hidden font-sans text-gray-100 selection:bg-red-900 pb-20">
       <style>{`
@@ -403,22 +377,51 @@ const App = () => {
 
         <div className="w-full flex justify-center gap-4 mb-12 z-40">
           <ScrollSelector
-            title="Timeline"
             options={days}
             selected={activeDay}
             onSelect={setActiveDay}
           />
           <ScrollSelector
-            title="Protocol"
             options={categories}
             selected={activeCategory}
             onSelect={setActiveCategory}
-            type="icon"
           />
         </div>
 
         <div className="w-full max-w-6xl min-h-[50vh]">
-          {filteredEvents.length > 0 ? (
+          {loading ? (
+            // Loading state - only for the events area
+            <div className="flex items-center justify-center py-20">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#d4af37] mx-auto mb-4"></div>
+                <p className="text-[#d4af37] font-cinzel">Loading Events...</p>
+              </div>
+            </div>
+          ) : error ? (
+            // Error state - only for the events area
+            <div className="text-center py-20 border border-red-900/30 bg-black/20 backdrop-blur-sm rounded-sm mt-8 relative overflow-hidden">
+              {/* Dark background pattern consistent with the page */}
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#4a0000_0%,_#000000_100%)] opacity-30"></div>
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(220,20,60,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(220,20,60,0.03)_1px,transparent_1px)] bg-[size:30px_30px]"></div>
+              
+              <div className="relative z-10">
+                <X className="w-12 h-12 text-red-500/80 mx-auto mb-4" />
+                <h3 className="text-lg font-cinzel text-red-400 mb-2 tracking-wide">
+                  Connection Failed
+                </h3>
+                <p className="text-gray-400 font-mono text-sm mb-6 max-w-md mx-auto leading-relaxed">
+                  {error}
+                </p>
+                <button 
+                  onClick={retryFetch} 
+                  className="px-6 py-3 bg-red-900/20 border border-red-900/50 text-red-400 font-cinzel hover:bg-red-900/40 hover:text-red-300 transition-all duration-300 tracking-wide uppercase text-sm hover:shadow-[0_0_15px_rgba(220,38,38,0.3)]"
+                >
+                  Retry Connection
+                </button>
+              </div>
+            </div>
+          ) : filteredEvents.length > 0 ? (
+            // Events grid
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredEvents.map((event) => (
                 <EventCard
@@ -429,17 +432,27 @@ const App = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-20 border border-red-900/30 bg-black/60 rounded-sm mt-8 backdrop-blur-sm">
-              <X className="w-8 h-8 text-red-900/50 mx-auto mb-3" />
-              <h3 className="text-lg font-cinzel text-gray-400">
-                Archives Empty
-              </h3>
+            // No events found
+            <div className="text-center py-20 border border-red-900/30 bg-black/20 backdrop-blur-sm rounded-sm mt-8 relative overflow-hidden">
+              {/* Dark background pattern consistent with the page */}
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#4a0000_0%,_#000000_100%)] opacity-20"></div>
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(220,20,60,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(220,20,60,0.03)_1px,transparent_1px)] bg-[size:30px_30px]"></div>
+              
+              <div className="relative z-10">
+                <X className="w-8 h-8 text-red-900/50 mx-auto mb-3" />
+                <h3 className="text-lg font-cinzel text-gray-400 tracking-wide">
+                  Archives Empty
+                </h3>
+                <p className="text-gray-500 font-mono text-xs mt-2 tracking-widest uppercase">
+                  No events found for this selection
+                </p>
+              </div>
             </div>
           )}
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default App;
