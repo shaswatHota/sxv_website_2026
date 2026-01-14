@@ -52,18 +52,18 @@ export default function Footer({ className = "" }: FooterProps) {
             </div>
             
             <p className="text-gray-500 leading-relaxed font-['Shojumaru'] text-lg max-w-sm border-l-2 border-[var(--blood-red)] pl-4">
-              Bridging the gap between tradition and the digital frontier. Join the network of creators, gamers, and innovators.
+              
             </p>
             
             {/* Status Indicators */}
             <div className="flex items-center gap-4 mt-2">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-[var(--paper-white)] rounded-full animate-pulse shadow-[0_0_10px_var(--paper-white)]"></span>
-                <span className="text-xs font-['Shojumaru'] text-[var(--paper-white)] tracking-widest">SERVER: ONLINE</span>
+                <span className="text-xs font-['Shojumaru'] text-[var(--paper-white)] tracking-widest"></span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-[var(--shrine-red)] rounded-full shadow-[0_0_10px_var(--shrine-red)]"></span>
-                <span className="text-xs font-['Shojumaru'] text-[var(--shrine-red)] tracking-widest">SECURE</span>
+                <span className="text-xs font-['Shojumaru'] text-[var(--shrine-red)] tracking-widest"></span>
               </div>
             </div>
           </div>
@@ -134,7 +134,7 @@ export default function Footer({ className = "" }: FooterProps) {
           {/* COL 3: Social & Subscribe (3 Spans) */}
           <div className="lg:col-span-3 flex flex-col gap-6">
             <h3 className="text-[var(--rust-brown)] font-['Shojumaru'] tracking-[0.2em] text-sm uppercase flex items-center gap-2">
-              <i className="fa-solid fa-satellite-dish"></i> Uplink
+              <i className="fa-solid fa-satellite-dish"></i> Socials
             </h3>
             
             {/* Social Icons - Updated with specific links */}

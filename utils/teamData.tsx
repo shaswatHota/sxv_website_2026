@@ -16,7 +16,7 @@ export const honourableMentions: TeamMember[] = [
     designation: "Hon'ble Vice Chancellor, VSSUT",
     jpTitle: "総長", 
     image: "/teams/vcSir.jpg",
-    linkedin:"https://www.linkedin.com/in/aryan-rajguru-a1333230a/",
+    linkedin:"",
   },
   {
     id: "2",
