@@ -14,8 +14,8 @@ export async function POST(req: Request) {
     });
 
     await transporter.sendMail({
-      from: `"SXV Website Contact" ${email}`,
-      to: `${process.env.MAIL_USER}`,
+      from: `"SXV Website Contact" <${process.env.MAIL_USER}>`,
+      to: process.env.MAIL_USER,
       replyTo: email,
       subject: `New Contact Message from ${name}`,
       html: `
@@ -29,12 +29,10 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error(error);
+    console.error("Mail error:", error);
     return NextResponse.json(
       { success: false, error: "Failed to send email" },
       { status: 500 }
     );
   }
 }
-
-//ntud qwla oakh gzoa

@@ -37,7 +37,7 @@ export const honourableMentions: TeamMember[] = [
     name: "Dr. Padmanav Mishra",
     designation: "Vice President, Cultural Society",
     jpTitle: "文化副会長",
-    image: "https://res.cloudinary.com/dlm8mel1x/image/upload/v1739726578/sxv/heumbxcqmolex5i2b6yv.jpg",
+    image: "/teams/pv_sir.jpg",
   },
 ];
 

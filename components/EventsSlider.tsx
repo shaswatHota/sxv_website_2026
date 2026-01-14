@@ -7,20 +7,20 @@ import { ArrowRight, ArrowLeft } from 'lucide-react';
 const EVENTS_DATA = [
   {
     id: 1,
-    title: "COMING SOON",
-    image: "/comingsoon.png",
+    title: "Hack For Tomorrow",
+    image: "/home/hft.jpg",
     color: "#4ade80" // Greenish
   },
   {
     id: 2,
-    title: "COMING SOON",
-    image: "/comingsoon.png",
+    title: "Mr. & Miss Vassaunt",
+    image: "/home/mrmiss.jpg",
     color: "#f472b6" // Pinkish
   },
   {
     id: 3,
-    title: "COMING SOON",
-    image: "/comingsoon.png",
+    title: "Rogue Runway",
+    image: "/home/runway.jpg",
     color: "#facc15" // Yellowish
   },
   {

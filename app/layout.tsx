@@ -34,6 +34,9 @@ export const metadata: Metadata = {
     ],
   },
   manifest: '/site.webmanifest',
+  keywords: [
+    "samavesh vassaunt", "vssut fest", "vssut burla", "techno cultural fest", "college fest 2026", "sambalpur fest", "odisha college fest", "technical fest", "cultural events", "vssut events", "samavesh 2026", "vassaunt 2026", "engineering fest" , "sxv" , "samavesh x vassaunt" , "sxv 2026"
+  ]
 };
 
 export default function RootLayout({
@@ -45,22 +48,22 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* Font Preloading for better performance */}
-        <link 
-          rel="preload" 
-          href="/fonts/YOZAKURA-Regular.woff2" 
-          as="font" 
-          type="font/woff2" 
+        <link
+          rel="preload"
+          href="/fonts/YOZAKURA-Regular.woff2"
+          as="font"
+          type="font/woff2"
           crossOrigin="anonymous"
         />
-        <link 
-          rel="preload" 
-          href="/fonts/YOZAKURA-Regular.woff" 
-          as="font" 
-          type="font/woff" 
+        <link
+          rel="preload"
+          href="/fonts/YOZAKURA-Regular.woff"
+          as="font"
+          type="font/woff"
           crossOrigin="anonymous"
         />
-        <link 
-          rel="stylesheet" 
+        <link
+          rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         />
       </head>
@@ -70,9 +73,9 @@ export default function RootLayout({
         <AuthProvider>
           <ConditionalLayout>{children}</ConditionalLayout>
         </AuthProvider>
-        <Toaster 
-          position="top-right" 
-          richColors 
+        <Toaster
+          position="top-right"
+          richColors
           closeButton
           theme="dark"
         />

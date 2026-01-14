@@ -130,7 +130,7 @@ export const clubs: Club[] = [
     jpName: '芸術写真',
     description:
       'PIXELS is the official Art & Photography Club of VSSUT, Burla, dedicated to capturing creativity through lenses and strokes. The club serves as a vibrant platform for students to explore photography, cinematography, digital art, sketching, and visual storytelling. Through workshops, photowalks, exhibitions, competitions, and event coverage, PIXELS nurtures artistic expression and technical skills. United by a passion for visuals, the club documents campus life, celebrates moments, and transforms ideas into compelling art, making creativity a shared experience at VSSUT.',
-    image: '/clubs/PIXELS.jpeg',
+    image: '/clubs/Pixels.png',
     hanko: '美',
     overlayChar: '写',
   },
