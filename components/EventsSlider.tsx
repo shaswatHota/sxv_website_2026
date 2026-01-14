@@ -8,7 +8,7 @@ const EVENTS_DATA = [
   {
     id: 1,
     title: "HACK FOR TOMORROW",
-    image: "/home/hft.jpg",
+    image: "/home/hft5.png",
     color: "#4ade80" // Greenish
   },
   {
@@ -20,7 +20,7 @@ const EVENTS_DATA = [
   {
     id: 3,
     title: "ROGUE RUNWAY",
-    image: "/home/runway.jpg",
+    image: "/home/rog6.png",
     color: "#facc15" // Yellowish
   },
   {
@@ -226,7 +226,7 @@ export default function EventsSlider() {
                   }`}>
                     <div className="flex items-center gap-2 mb-3">
                       <div className="w-8 h-[2px] bg-white/50"></div>
-                      <p className="text-xs font-bold text-white/80 tracking-[0.2em] uppercase">Event</p>
+                      <p className="text-xs font-bold text-white/80 tracking-[0.2em] uppercase"></p>
                     </div>
                     <h3 className="text-3xl font-black text-white leading-none">{item.title}</h3>
                   </div>
