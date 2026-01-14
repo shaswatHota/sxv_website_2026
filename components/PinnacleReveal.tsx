@@ -22,11 +22,28 @@ interface ParticleType {
 export default function PinnacleReveal() {
   const [isRevealed, setIsRevealed] = useState(false);
   const [showIdentityConfirmed, setShowIdentityConfirmed] = useState(false);
+  const [isTimerComplete, setIsTimerComplete] = useState(false);
+
+  // Check if timer has ended (January 16, 2026 at 12:00 AM IST)
+  useEffect(() => {
+    const targetTime = new Date("2026-01-16T00:00:00+05:30").getTime();
+    
+    const checkTimer = () => {
+      const now = Date.now();
+      const isComplete = now >= targetTime;
+      setIsTimerComplete(isComplete);
+      console.log('Pinnacle timer check:', { now, targetTime, isComplete, remaining: targetTime - now });
+    };
+
+    checkTimer();
+    const interval = setInterval(checkTimer, 100); // Check more frequently (every 100ms)
+    return () => clearInterval(interval);
+  }, []);
 
   // Load state from sessionStorage on mount (persists during navigation, not on reload)
   useEffect(() => {
     const savedState = sessionStorage.getItem('pinnacleRevealed');
-    if (savedState === 'true') {
+    if (savedState === 'true' && isTimerComplete) {
       setIsRevealed(true);
       // Apply the reveal-active class to body
       document.body.classList.add('reveal-active');
@@ -35,7 +52,7 @@ export default function PinnacleReveal() {
         container.classList.add('reveal-active');
       }
     }
-  }, []);
+  }, [isTimerComplete]);
 
   const createExplosion = () => {
     const canvas = document.getElementById('particle-canvas') as HTMLCanvasElement;
@@ -146,6 +163,11 @@ export default function PinnacleReveal() {
   };
 
   const handleClick = () => {
+    // Don't allow interaction if timer hasn't ended
+    if (!isTimerComplete) {
+      return;
+    }
+
     if (isRevealed) {
       // Celebration logic if already revealed
       createExplosion();
@@ -229,6 +251,10 @@ export default function PinnacleReveal() {
           z-index: 20;
         }
 
+        .stage-container.timer-locked {
+          cursor: not-allowed;
+        }
+
         .reveal-card {
           position: relative;
           width: 100%;
@@ -245,6 +271,11 @@ export default function PinnacleReveal() {
           overflow: hidden;
           border: 2px solid var(--color-crimson);
           box-shadow: 0 0 50px rgba(0,0,0,0.8);
+          display: none;
+        }
+
+        .reveal-active .layer-reveal {
+          display: block;
         }
 
         .guest-image {
@@ -516,6 +547,13 @@ export default function PinnacleReveal() {
           animation: pulse-text 2s infinite;
         }
 
+        .click-prompt-text.locked {
+          color: #888;
+          border-color: #444;
+          box-shadow: none;
+          animation: none;
+        }
+
         @keyframes pulse-text {
           0%, 100% { box-shadow: 0 0 5px rgba(255, 70, 85, 0.3); opacity: 0.8; }
           50% { box-shadow: 0 0 20px rgba(255, 70, 85, 0.6); opacity: 1; }
@@ -747,7 +785,11 @@ export default function PinnacleReveal() {
         <canvas id="particle-canvas"></canvas>
 
         {/* Container is now the click trigger */}
-        <div className="stage-container" id="card-container" onClick={handleClick}>
+        <div 
+          className={`stage-container ${!isTimerComplete ? 'timer-locked' : ''}`} 
+          id="card-container" 
+          onClick={handleClick}
+        >
           <div className="reveal-card">
             {/* BACK FACE (REVEAL) */}
             <div className="layer-reveal">
@@ -814,7 +856,9 @@ export default function PinnacleReveal() {
               {/* Visual Prompt */}
               {!isRevealed && (
                 <div className="click-prompt">
-                  <span className="click-prompt-text">[ CLICK TO REVEAL ]</span>
+                  <span className={`click-prompt-text ${!isTimerComplete ? 'locked' : ''}`}>
+                    {isTimerComplete ? '[ TAP TO REVEAL ]' : '[ STAY TUNED... ]'}
+                  </span>
                 </div>
               )}
             </div>
