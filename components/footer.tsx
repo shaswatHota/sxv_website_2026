@@ -189,7 +189,7 @@ export default function Footer({ className = "" }: FooterProps) {
         {/* Bottom Bar */}
         <div className="mt-16 pt-6 border-t border-gray-900 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-['Shojumaru'] text-gray-600">
           <div className="flex items-center gap-4">
-            <span className="text-[var(--shrine-red)]">© 2025 SAMAVESHxVASSAUNT</span>
+            <span className="text-[var(--shrine-red)]">© 2026 SAMAVESHxVASSAUNT</span>
             <span className="hidden md:inline text-gray-800">|</span>
           </div>
           

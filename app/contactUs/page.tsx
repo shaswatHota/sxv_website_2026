@@ -215,7 +215,7 @@ export default function Page() {
                     <Mail size={18} />
                   </div>
                   <span className="text-sm tracking-wide">
-                    pratikkumarbehera30@gmail.com<br/>
+                    techsociety@vssut.ac.in<br/>
                     <span className="text-xs text-neutral-500">Reply within 24h</span>
                   </span>
                 </div>

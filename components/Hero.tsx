@@ -87,6 +87,11 @@ export default function Hero() {
             VASSAUNT
           </div>
         </div>
+        <div className={styles.subtitleContainer}>
+          <div className={styles.subtitle}>
+            THE TECHNO CULTURAL FEST OF VSSUT, BURLA
+          </div>
+        </div>
         <div className={styles.timerContainer}>
           <Timer />
         </div>
