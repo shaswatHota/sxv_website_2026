@@ -67,8 +67,8 @@ export const studentBodies: TeamMember[] = [
     designation: "Coordinator, SAMAVESH",
     jpTitle: "調整役",
     image: "/teams/anshul.jpg",
-    linkedin:"https://www.linkedin.com/in/aryan-rajguru-a1333230a/",
-    email:" ",
+    linkedin:"https://www.linkedin.com/in/ansul-nanda-96961b3a1",
+    email:"ansulnanda3@gmail.com",
   },
    {
     id: "8",

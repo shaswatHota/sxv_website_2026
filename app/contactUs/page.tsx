@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { toast, Toaster } from 'sonner';
 
 // Zod validation schema
 const contactFormSchema = z.object({
@@ -105,26 +106,55 @@ export default function Page() {
   }, []);
 
   const onSubmit = async (data: ContactFormData) => {
-  try {
-    const res = await fetch("/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-    if (!res.ok) throw new Error("Failed");
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || "Failed to send message");
+      }
 
-    setIsSubmitted(true);
-    reset();
-    setTimeout(() => setIsSubmitted(false), 3000);
-  } catch (err) {
-    alert("Message could not be sent. Please try again.");
-  }
-};
+      setIsSubmitted(true);
+      reset();
+      
+      // Success toast
+      toast.success('Message sent successfully!', {
+        description: 'We will get back to you within 24 hours.',
+        duration: 4000,
+      });
+      
+      setTimeout(() => setIsSubmitted(false), 3000);
+    } catch (err) {
+      // Error toast
+      toast.error('Failed to send message', {
+        description: err instanceof Error ? err.message : 'Please try again later.',
+        duration: 4000,
+      });
+    }
+  };
 
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 font-sans relative overflow-hidden selection:bg-red-900 selection:text-white">
+      {/* Toast Container */}
+      <Toaster 
+        position="top-right" 
+        richColors 
+        closeButton
+        toastOptions={{
+          style: {
+            background: '#171717',
+            border: '1px solid #404040',
+            color: '#fafafa',
+          },
+          className: 'font-japanese-serif',
+        }}
+      />
+      
       {/* Styles for traditional vibe */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&display=swap');
@@ -205,7 +235,7 @@ export default function Page() {
                     <Phone size={18} />
                   </div>
                   <span className="text-sm tracking-wide">
-                    +91 9861-405-554<br/>
+                    +91 7978621094<br/>
                     <span className="text-xs text-neutral-500">Mon-Fri, 9am - 6pm</span>
                   </span>
                 </div>
@@ -215,7 +245,7 @@ export default function Page() {
                     <Mail size={18} />
                   </div>
                   <span className="text-sm tracking-wide">
-                    techsociety@vssut.ac.in<br/>
+                    enigma.vssut@gmail.com<br/>
                     <span className="text-xs text-neutral-500">Reply within 24h</span>
                   </span>
                 </div>
