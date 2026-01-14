@@ -16,6 +16,7 @@ import { LoginSchema } from "@/Schemas/loginSchema";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { jwtDecode } from "jwt-decode";
+import { toast } from "sonner";
 
 // --- Typography ---
 const noto = Noto_Serif_JP({
@@ -99,14 +100,12 @@ export default function LoginPage() {
   const [passwordError, setPasswordError] = useState<boolean | string>("");
   const [passwordErr, setpassworderr] = useState<string>("");
   const [emailErr, setEmailErr] = useState<string>("");
-  const [error, setError] = useState("");
   const { login: authLogin } = useAuth();
 
   // Hydration fix
   useEffect(() => {
     setMounted(true);
     // Clear any existing errors when component mounts
-    setError("");
     setEmailError("");
     setPasswordError("");
     setEmailErr("");
@@ -144,7 +143,6 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     // Clear previous errors
-    setError("");
     setEmailError("");
     setPasswordError("");
     setEmailErr("");
@@ -159,16 +157,19 @@ export default function LoginPage() {
       
       if (emailInValid) { 
         setEmailError(false); 
-        setEmailErr(emailInValid.message); 
+        setEmailErr(emailInValid.message);
+        toast.error(emailInValid.message);
       }
       if (passwordInValid) { 
         setPasswordError(false); 
-        setpassworderr(passwordInValid.message); 
+        setpassworderr(passwordInValid.message);
+        toast.error(passwordInValid.message);
       }
       return;
     }
 
     setLoading(true);
+    
     try {
       console.log('Login service called with:', { email, password: '***' });
       console.log('API base URL:', process.env.NEXT_PUBLIC_API_URL || 'https://sxv-backend-eight.vercel.app');
@@ -186,6 +187,8 @@ export default function LoginPage() {
       
       console.log('Decoded user data:', userData);
       
+      toast.success(`Welcome back, ${userData.name}!`);
+      
       // Use Auth context login function which handles token storage and redirect
       authLogin(res.data.token, userData);
       
@@ -202,6 +205,10 @@ export default function LoginPage() {
         
         if (err.response.status === 500) {
           errorMessage = "Server error occurred. Please try again or contact support if the issue persists.";
+        } else if (err.response.status === 401) {
+          errorMessage = "Invalid email or password. Please try again.";
+        } else if (err.response.status === 404) {
+          errorMessage = "Account not found. Please sign up first.";
         }
       } else if (err.request) {
         // Network error
@@ -213,7 +220,7 @@ export default function LoginPage() {
         errorMessage = err.message || "An unexpected error occurred.";
       }
       
-      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -450,12 +457,6 @@ export default function LoginPage() {
                 </AnimatePresence>
               </div>
             </div>
-
-            {error && (
-              <div className="p-3 border border-red-900 bg-red-950/50 text-red-300 text-center text-sm font-cinzel rounded-sm">
-                {error}
-              </div>
-            )}
 
             <div className="flex justify-between items-center mt-2">
                 <span className="text-[#57534e] text-xs font-noto">Forgot?</span>

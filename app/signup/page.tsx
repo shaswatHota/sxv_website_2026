@@ -11,6 +11,7 @@ import { Noto_Serif_JP, Zen_Tokyo_Zoo, Cinzel } from "next/font/google";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Sword, ChevronDown } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 
 // --- Typography ---
@@ -344,29 +345,35 @@ export default function SignupPage() {
       if (emailInValid) {
         setEmailError(false);
         setEmailErr(emailInValid.message);
+        toast.error(emailInValid.message);
       }
       if (nameInValid) {
         setNameError(false);
         setNameErr(nameInValid.message);
+        toast.error(nameInValid.message);
       }
       if (phoneInValid) {
         setPhoneError(false);
         setPhoneErr(phoneInValid.message);
+        toast.error(phoneInValid.message);
       }
       if (regdNoInValid) {
         setRegdNoError(false);
         setRegdNoErr(regdNoInValid.message);
+        toast.error(regdNoInValid.message);
       }
       return;
     }
 
     setLoading(true);
+    
     try {
       await sendOTP({ email: form.email });
+      toast.success("OTP sent successfully! Please check your email.");
       setStep(2);
-      alert("OTP sent to your email. Please check and continue.");
     } catch (err: any) {
-      alert(err?.response?.data?.message || "Failed to send OTP");
+      const errorMessage = err?.response?.data?.message || "Failed to send OTP. Please try again.";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -377,6 +384,7 @@ export default function SignupPage() {
     if (!form.otp || !/^\d{4}$/.test(form.otp)) {
       setOtpError(false);
       setOtpErr("Please enter a valid 4-digit OTP");
+      toast.error("Please enter a valid 4-digit OTP");
       return;
     }
 
@@ -396,10 +404,12 @@ export default function SignupPage() {
       if (passwordInValid) {
         setPasswordError(false);
         setpassworderr(passwordInValid.message);
+        toast.error(passwordInValid.message);
       }
       if (confirmPasswordInvalid) {
         setConfirmPasswordError(false);
         setconfirmpassworderr(confirmPasswordInvalid.message);
+        toast.error(confirmPasswordInvalid.message);
       }
       return;
     }
@@ -407,25 +417,31 @@ export default function SignupPage() {
     if (form.password !== form.confirmPassword) {
       setConfirmPasswordError(false);
       setconfirmpassworderr("Passwords do not match.");
+      toast.error("Passwords do not match.");
       return;
     }
 
     setLoading(true);
+    
     try {
       const payload = { ...form };
       const res = await signup(payload);
       
+      toast.success("Account created successfully! Redirecting to login...");
+      
       // Always redirect to login page after successful signup
-      alert("Signup successful! Please login with your credentials.");
-      window.location.href = "/login";
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1500);
       
     } catch (error: any) {
       if (error.response?.status === 404) {
-        alert("OTP expired. Please resend!");
+        toast.error("OTP expired. Please resend!");
       } else if (error.response?.status === 401) {
-        alert("Invalid OTP. Please check your email.");
+        toast.error("Invalid OTP. Please check your email.");
       } else {
-        alert(error?.response?.data?.message || "Signup failed");
+        const errorMessage = error?.response?.data?.message || "Signup failed. Please try again.";
+        toast.error(errorMessage);
       }
     } finally {
       setLoading(false);
