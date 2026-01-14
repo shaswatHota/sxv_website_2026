@@ -1,10 +1,9 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { clubs, Club } from '@/utils/clubData'
 import ClubModal from '@/components/ClubModal'
-import { Preview } from '@mui/icons-material'
 
 // --- SUB-COMPONENTS ---
 
@@ -63,15 +62,6 @@ export default function ClubsPage() {
   const closeModal = () => {
     setIsModalOpen(false)
     setSelectedClub(null)
-  }
-
-  const [expandedStates, setExpandedStates] = useState<
-    Record<string | number, boolean>
-  >({})
-
-  const toggleExpand = (index:number) => {
-  handleClubClick(clubs[index])
-    
   }
 
   return (
@@ -135,14 +125,11 @@ export default function ClubsPage() {
 
         {/* CLUBS GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full max-w-[1400px]">
-          {visibleClubs.map((club,i) => {
-            const isExpanded = expandedStates[i]
-            const words = club.description?.split(' ') || []
-            const isLong = words.length > 20
+          {visibleClubs.map((club, i) => {
             return (
               <article
                 key={club.id}
-                className="group relative bg-[#0f0a0a] border border-[#2e0e0e] overflow-hidden flex flex-col h-[400px] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(80,0,0,0.5)] cursor-pointer"
+                className="group relative bg-[#0f0a0a] border border-[#2e0e0e] overflow-hidden flex flex-col transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(80,0,0,0.5)] cursor-pointer"
                 onClick={() => handleClubClick(club)}
               >
                 {/* Japanese vertical tag */}
@@ -151,12 +138,12 @@ export default function ClubsPage() {
                 </div>
 
                 {/* Image */}
-                <div className="relative w-full h-[200px] overflow-hidden border-b-[3px] border-[#500000]">
+                <div className="relative w-full aspect-[4/3] overflow-hidden border-b-[3px] border-[#500000]">
                   <Image
                     src={club.image}
                     alt={club.name}
                     fill
-                    className="object-fir brightness-[0.7] group-hover:scale-110 group-hover:brightness-100 transition-all duration-700"
+                    className="object-contain brightness-[0.7] group-hover:scale-110 group-hover:brightness-100 transition-all duration-700"
                   />
                   <div
                     className="absolute -bottom-2 -left-1 text-[3.5rem] font-black text-white/5 pointer-events-none group-hover:text-white/20"
